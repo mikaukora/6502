@@ -333,3 +333,13 @@ def test_CLC():
     assert cpu.c == 0
     cpu.step()
     assert cpu.c == 0
+
+def test_CLD():
+    bus = Bus(Memory([0xD8, 0xD8]))
+    cpu = CPU(bus)
+    cpu.d = 1
+
+    cpu.step()
+    assert cpu.d == 0
+    cpu.step()
+    assert cpu.d == 0

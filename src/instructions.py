@@ -94,7 +94,7 @@ standard = [
         [(i.LDY, m.IMM), None, (i.LDX, m.IMM), None, None, None, None, None, (i.TAY, m.IMPL), (i.LDA, m.IMM), (i.TAX, m.IMPL), None, None, None, None, None], # A
         [None, None, None, None, None, None, None, None, None, None, (i.TSX, m.IMPL), None, None, None, None, None], # B
         [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], # C
-        [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], # D
+        [None, None, None, None, None, None, None, None, (i.CLD, m.IMPL), None, None, None, None, None, None, None], # D
         [None, None, None, None, None, None, None, None, None, None, (i.NOP, m.IMPL), None, None, None, None, None], # E
         [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, 1], # F
     ]

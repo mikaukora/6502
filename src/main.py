@@ -148,7 +148,9 @@ class CPU:
             case i.CLC:
                 if self.addressing_mode == m.IMPL:
                     self.c = 0
-
+            case i.CLD:
+                if self.addressing_mode == m.IMPL:
+                    self.d = 0
     """
         Starts from the address in PC.
     """

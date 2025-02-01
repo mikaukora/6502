@@ -28,6 +28,7 @@ The emulator currently supports the following 6502 instructions:
   - `TYA` - Transfer Y accumulator
 - **Flag Instructions**
   - `CLC`- Clear Carry
+  - `CLD` - Clear Decimal (BCD arithmetics disabled)
 - **Other**
   - `NOP` - No Operation
 
