@@ -145,6 +145,9 @@ class CPU:
                     self.n = self.calc_n(self.A)
             case i.NOP:
                 return
+            case i.CLC:
+                if self.addressing_mode == m.IMPL:
+                    self.c = 0
 
     """
         Starts from the address in PC.

@@ -82,7 +82,7 @@ m = AddressingMode
 standard = [
         #0     1     2     3     4     5     6     7     8     9     A     B     C     D     E     F
         [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], # 0
-        [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], # 1
+        [None, None, None, None, None, None, None, None, (i.CLC, m.IMPL), None, None, None, None, None, None, None], # 1
         [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], # 2
         [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], # 3
         [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], # 4

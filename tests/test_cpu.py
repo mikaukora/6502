@@ -323,3 +323,13 @@ def test_NOP():
     assert cpu.PC == 0x04
     cpu.step()
     assert cpu.PC == 0x05
+
+def test_CLC():
+    bus = Bus(Memory([0x18, 0x18]))
+    cpu = CPU(bus)
+    cpu.c = 1
+
+    cpu.step()
+    assert cpu.c == 0
+    cpu.step()
+    assert cpu.c == 0
