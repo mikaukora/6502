@@ -29,6 +29,7 @@ The emulator currently supports the following 6502 instructions:
 - **Flag Instructions**
   - `CLC`- Clear Carry
   - `CLD` - Clear Decimal (BCD arithmetics disabled)
+  - `CLI` - Clear Interrupt Disable Bit
 - **Other**
   - `NOP` - No Operation
 

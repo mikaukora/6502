@@ -343,3 +343,13 @@ def test_CLD():
     assert cpu.d == 0
     cpu.step()
     assert cpu.d == 0
+
+def test_CLI():
+    bus = Bus(Memory([0x58, 0x58]))
+    cpu = CPU(bus)
+    cpu.i = 1
+
+    cpu.step()
+    assert cpu.i == 0
+    cpu.step()
+    assert cpu.i == 0

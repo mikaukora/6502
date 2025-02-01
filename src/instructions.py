@@ -86,7 +86,7 @@ standard = [
         [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], # 2
         [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], # 3
         [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], # 4
-        [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], # 5
+        [None, None, None, None, None, None, None, None, (i.CLI, m.IMPL), None, None, None, None, None, None, None], # 5
         [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], # 6
         [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], # 7
         [None, None, None, None, (i.STY, m.ZPG), (i.STA, m.ZPG), (i.STX, m.ZPG), None, None, None, (i.TXA, m.IMPL), None, None, None, None, None], # 8
