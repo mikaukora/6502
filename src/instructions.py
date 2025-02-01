@@ -92,7 +92,7 @@ standard = [
         [None, None, None, None, (i.STY, m.ZPG), (i.STA, m.ZPG), (i.STX, m.ZPG), None, None, None, (i.TXA, m.IMPL), None, None, None, None, None], # 8
         [None, None, None, None, None, None, None, None, (i.TYA, m.IMPL), None, (i.TXS, m.IMPL), None, None, None, None, None ], # 9
         [(i.LDY, m.IMM), None, (i.LDX, m.IMM), None, None, None, None, None, (i.TAY, m.IMPL), (i.LDA, m.IMM), (i.TAX, m.IMPL), None, None, None, None, None], # A
-        [None, None, None, None, None, None, None, None, None, None, (i.TSX, m.IMPL), None, None, None, None, None], # B
+        [None, None, None, None, None, None, None, None, (i.CLV, m.IMPL), None, (i.TSX, m.IMPL), None, None, None, None, None], # B
         [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], # C
         [None, None, None, None, None, None, None, None, (i.CLD, m.IMPL), None, None, None, None, None, None, None], # D
         [None, None, None, None, None, None, None, None, None, None, (i.NOP, m.IMPL), None, None, None, None, None], # E

@@ -353,3 +353,13 @@ def test_CLI():
     assert cpu.i == 0
     cpu.step()
     assert cpu.i == 0
+
+def test_CLV():
+    bus = Bus(Memory([0xB8, 0xB8]))
+    cpu = CPU(bus)
+    cpu.v = 1
+
+    cpu.step()
+    assert cpu.v == 0
+    cpu.step()
+    assert cpu.v == 0

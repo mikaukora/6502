@@ -154,6 +154,9 @@ class CPU:
             case i.CLI:
                 if self.addressing_mode == m.IMPL:
                     self.i = 0
+            case i.CLV:
+                if self.addressing_mode == m.IMPL:
+                    self.v = 0
 
     """
         Starts from the address in PC.
