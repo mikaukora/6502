@@ -51,9 +51,9 @@ The emulator currently supports the following 6502 instructions:
 - **Absolute** (`$0000 - $FFFF`)
 - **Implied**
 
-## Installation
+## Running
 
-At this stage, the emulator is under active development, and no standalone installation is provided. However, unit tests are available to verify functionality.
+At this stage, the emulator is under active development, and no standalone running is provided. However, unit tests are available to verify functionality.
 
 ## Running Tests
 
