@@ -532,3 +532,107 @@ def test_LDY_ZPG():
     assert cpu.Y == 0xFF
     assert cpu.z == 0x00
     assert cpu.n == 0x01
+
+def test_LDA_ABS():
+    bus = Bus(Memory([0xAD, 0x06, 0x00, 0xAD, 0x07, 0x00, 0x00, 0xFF]))
+    cpu = CPU(bus)
+    cpu.A = 0xEA
+
+    cpu.step()
+    assert cpu.A == 0x00
+    assert cpu.z == 0x01
+    assert cpu.n == 0x00
+
+    cpu.step()
+    assert cpu.A == 0xFF
+    assert cpu.z == 0x00
+    assert cpu.n == 0x01
+
+def test_LDX_ABS():
+    bus = Bus(Memory([0xAE, 0x06, 0x00, 0xAE, 0x07, 0x00, 0x00, 0xFF]))
+    cpu = CPU(bus)
+    cpu.X = 0xEA
+
+    cpu.step()
+    assert cpu.X == 0x00
+    assert cpu.z == 0x01
+    assert cpu.n == 0x00
+
+    cpu.step()
+    assert cpu.X == 0xFF
+    assert cpu.z == 0x00
+    assert cpu.n == 0x01
+
+def test_LDY_ABS():
+    bus = Bus(Memory([0xAC, 0x06, 0x00, 0xAC, 0x07, 0x00, 0x00, 0xFF]))
+    cpu = CPU(bus)
+    cpu.Y = 0xEA
+
+    cpu.step()
+    assert cpu.Y == 0x00
+    assert cpu.z == 0x01
+    assert cpu.n == 0x00
+
+    cpu.step()
+    assert cpu.Y == 0xFF
+    assert cpu.z == 0x00
+    assert cpu.n == 0x01
+
+def test_STA_ABS():
+    memory = Memory([0x8D, 0x06, 0x00, 0x8D, 0x07, 0x00, 0x00, 0x00])
+    bus = Bus(memory)
+    cpu = CPU(bus)
+    cpu.A = 0xEA
+
+    cpu.step()
+    assert memory.data[(0x00 << 8) + 0x06] == 0xEA
+    cpu.step()
+    assert memory.data[(0x00 << 8) + 0x07] == 0xEA
+
+def test_STX_ABS():
+    memory = Memory([0x8E, 0x06, 0x00, 0x8E, 0x07, 0x00, 0x00, 0x00])
+    bus = Bus(memory)
+    cpu = CPU(bus)
+    cpu.X = 0xEA
+
+    cpu.step()
+    assert memory.data[(0x00 << 8) + 0x06] == 0xEA
+    cpu.step()
+    assert memory.data[(0x00 << 8) + 0x07] == 0xEA
+
+def test_STY_ABS():
+    memory = Memory([0x8C, 0x06, 0x00, 0x8C, 0x07, 0x00, 0x00, 0x00])
+    bus = Bus(memory)
+    cpu = CPU(bus)
+    cpu.Y = 0xEA
+
+    cpu.step()
+    assert memory.data[(0x00 << 8) + 0x06] == 0xEA
+    cpu.step()
+    assert memory.data[(0x00 << 8) + 0x07] == 0xEA
+
+def test_DEC_INC_ABS():
+    memory = Memory([0xCE, 0x0C, 0x00, 0xCE, 0x0C, 0x00, 0xEE, 0x0C, 0x00, 0xEE, 0x0C, 0x00, 0x00])
+    bus = Bus(memory)
+    cpu = CPU(bus)
+    cpu.Y = 0
+
+    cpu.step()
+    assert memory.data[(0x00 << 8) + 0x0C] == 0xFF
+    assert cpu.z == 0
+    assert cpu.n == 1
+
+    cpu.step()
+    assert memory.data[(0x00 << 8) + 0x0C] == 0xFE
+    assert cpu.z == 0
+    assert cpu.n == 1
+
+    cpu.step()
+    assert memory.data[(0x00 << 8) + 0x0C] == 0xFF
+    assert cpu.z == 0
+    assert cpu.n == 1
+
+    cpu.step()
+    assert memory.data[(0x00 << 8) + 0x0C] == 0x00
+    assert cpu.z == 1
+    assert cpu.n == 0

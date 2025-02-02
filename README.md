@@ -48,6 +48,7 @@ The emulator currently supports the following 6502 instructions:
 
 - **Immediate** (`#value`)
 - **Zero Page** (`$00 - $FF`)
+- **Absolute** (`$0000 - $FFFF`)
 - **Implied**
 
 ## Installation

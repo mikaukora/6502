@@ -10,7 +10,7 @@ def uint16(value: int) -> int:
 
 
 def toUint16(high: int, low: int) -> int:
-    return uint16(high << 8 + low)
+    return uint16((high << 8) + low)
 
 
 def bit(value: int) -> int:
@@ -103,6 +103,14 @@ class CPU:
                     self.A = self.read(src)
                     self.z = self.calc_z(self.A)
                     self.n = self.calc_n(self.A)
+                elif self.addressing_mode == m.ABS:
+                    self.fetch()
+                    ll = self.data
+                    self.fetch()
+                    hh = self.data
+                    self.A = self.read(toUint16(hh,ll))
+                    self.z = self.calc_z(self.A)
+                    self.n = self.calc_n(self.A)
             case i.LDX:
                 if self.addressing_mode == m.IMM:
                     self.fetch()
@@ -113,6 +121,14 @@ class CPU:
                     self.fetch()
                     src = self.data
                     self.X = self.read(src)
+                    self.z = self.calc_z(self.X)
+                    self.n = self.calc_n(self.X)
+                elif self.addressing_mode == m.ABS:
+                    self.fetch()
+                    ll = self.data
+                    self.fetch()
+                    hh = self.data
+                    self.X = self.read(toUint16(hh,ll))
                     self.z = self.calc_z(self.X)
                     self.n = self.calc_n(self.X)
             case i.LDY:
@@ -127,18 +143,44 @@ class CPU:
                     self.Y = self.read(src)
                     self.z = self.calc_z(self.Y)
                     self.n = self.calc_n(self.Y)
+                elif self.addressing_mode == m.ABS:
+                    self.fetch()
+                    ll = self.data
+                    self.fetch()
+                    hh = self.data
+                    self.Y = self.read(toUint16(hh,ll))
+                    self.z = self.calc_z(self.Y)
+                    self.n = self.calc_n(self.Y)
             case i.STA:
                 if self.addressing_mode == m.ZPG:
                     self.fetch()
                     self.write(self.data, self.A)
+                elif self.addressing_mode == m.ABS:
+                    self.fetch()
+                    ll = self.data
+                    self.fetch()
+                    hh = self.data
+                    self.write(toUint16(hh,ll), self.A)
             case i.STX:
                 if self.addressing_mode == m.ZPG:
                     self.fetch()
                     self.write(self.data, self.X)
+                elif self.addressing_mode == m.ABS:
+                    self.fetch()
+                    ll = self.data
+                    self.fetch()
+                    hh = self.data
+                    self.write(toUint16(hh,ll), self.X)
             case i.STY:
                 if self.addressing_mode == m.ZPG:
                     self.fetch()
                     self.write(self.data, self.Y)
+                elif self.addressing_mode == m.ABS:
+                    self.fetch()
+                    ll = self.data
+                    self.fetch()
+                    hh = self.data
+                    self.write(toUint16(hh,ll), self.Y)
             case i.TAX:
                 if self.addressing_mode == m.IMPL:
                     self.X = self.A
@@ -217,6 +259,16 @@ class CPU:
                     self.z = self.calc_z(value)
                     self.n = self.calc_n(value)
                     self.write(dst, value)
+                elif self.addressing_mode == m.ABS:
+                    self.fetch()
+                    ll = self.data
+                    self.fetch()
+                    hh = self.data
+                    value = self.read(toUint16(hh,ll))
+                    value = (value - 1) % 0x100
+                    self.z = self.calc_z(value)
+                    self.n = self.calc_n(value)
+                    self.write(toUint16(hh,ll), value)
             case i.INC:
                 if self.addressing_mode == m.ZPG:
                     self.fetch()
@@ -226,8 +278,16 @@ class CPU:
                     self.z = self.calc_z(value)
                     self.n = self.calc_n(value)
                     self.write(dst, value)
-
-
+                elif self.addressing_mode == m.ABS:
+                    self.fetch()
+                    ll = self.data
+                    self.fetch()
+                    hh = self.data
+                    value = self.read(toUint16(hh,ll))
+                    value = (value + 1) % 0x100
+                    self.z = self.calc_z(value)
+                    self.n = self.calc_n(value)
+                    self.write(toUint16(hh,ll), value)
     """
         Starts from the address in PC.
     """

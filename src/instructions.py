@@ -89,13 +89,13 @@ standard: List[List[Optional[Tuple[Instruction, AddressingMode]]]] = [
         [None, None, None, None, None, None, None, None, (i.CLI, m.IMPL), None, None, None, None, None, None, None], # 5
         [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], # 6
         [None, None, None, None, None, None, None, None, (i.SEI, m.IMPL), None, None, None, None, None, None, None], # 7
-        [None, None, None, None, (i.STY, m.ZPG), (i.STA, m.ZPG), (i.STX, m.ZPG), None, (i.DEY, m.IMPL), None, (i.TXA, m.IMPL), None, None, None, None, None], # 8
+        [None, None, None, None, (i.STY, m.ZPG), (i.STA, m.ZPG), (i.STX, m.ZPG), None, (i.DEY, m.IMPL), None, (i.TXA, m.IMPL), None, (i.STY, m.ABS), (i.STA, m.ABS), (i.STX, m.ABS), None], # 8
         [None, None, None, None, None, None, None, None, (i.TYA, m.IMPL), None, (i.TXS, m.IMPL), None, None, None, None, None ], # 9
-        [(i.LDY, m.IMM), None, (i.LDX, m.IMM), None, (i.LDY, m.ZPG), (i.LDA, m.ZPG), (i.LDX, m.ZPG), None, (i.TAY, m.IMPL), (i.LDA, m.IMM), (i.TAX, m.IMPL), None, None, None, None, None], # A
+        [(i.LDY, m.IMM), None, (i.LDX, m.IMM), None, (i.LDY, m.ZPG), (i.LDA, m.ZPG), (i.LDX, m.ZPG), None, (i.TAY, m.IMPL), (i.LDA, m.IMM), (i.TAX, m.IMPL), None, (i.LDY, m.ABS), (i.LDA, m.ABS), (i.LDX, m.ABS), None], # A
         [None, None, None, None, None, None, None, None, (i.CLV, m.IMPL), None, (i.TSX, m.IMPL), None, None, None, None, None], # B
-        [None, None, None, None, None, None, (i.DEC, m.ZPG), None, (i.INY, m.IMPL), None, (i.DEX, m.IMPL), None, None, None, None, None], # C
+        [None, None, None, None, None, None, (i.DEC, m.ZPG), None, (i.INY, m.IMPL), None, (i.DEX, m.IMPL), None, None, None, (i.DEC, m.ABS), None], # C
         [None, None, None, None, None, None, None, None, (i.CLD, m.IMPL), None, None, None, None, None, None, None], # D
-        [None, None, None, None, None, None, (i.INC, m.ZPG), None, (i.INX, m.IMPL), None, (i.NOP, m.IMPL), None, None, None, None, None], # E
+        [None, None, None, None, None, None, (i.INC, m.ZPG), None, (i.INX, m.IMPL), None, (i.NOP, m.IMPL), None, None, None, (i.INC, m.ABS), None], # E
         [None, None, None, None, None, None, None, None, (i.SED, m.IMPL), None, None, None, None, None, None, None], # F
     ]
 # fmt: on
