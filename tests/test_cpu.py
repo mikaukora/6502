@@ -471,3 +471,64 @@ def test_DEC_INC_ZPG():
     assert memory.data[0x08] == 0x00
     assert cpu.z == 1
     assert cpu.n == 0
+
+
+def test_LDA_ZPG():
+    bus = Bus(Memory([0xA5, 0x06, 0xA5, 0x07, 0xA5, 0x08, 0x00, 0x01, 0xFF]))
+    cpu = CPU(bus)
+    cpu.A = 0xEA
+
+    cpu.step()
+    assert cpu.A == 0x00
+    assert cpu.z == 0x01
+    assert cpu.n == 0x00
+
+    cpu.step()
+    assert cpu.A == 0x01
+    assert cpu.z == 0x00
+    assert cpu.n == 0x00
+
+    cpu.step()
+    assert cpu.A == 0xFF
+    assert cpu.z == 0x00
+    assert cpu.n == 0x01
+
+def test_LDX_ZPG():
+    bus = Bus(Memory([0xA6, 0x06, 0xA6, 0x07, 0xA6, 0x08, 0x00, 0x01, 0xFF]))
+    cpu = CPU(bus)
+    cpu.X = 0xEA
+
+    cpu.step()
+    assert cpu.X == 0x00
+    assert cpu.z == 0x01
+    assert cpu.n == 0x00
+
+    cpu.step()
+    assert cpu.X == 0x01
+    assert cpu.z == 0x00
+    assert cpu.n == 0x00
+
+    cpu.step()
+    assert cpu.X == 0xFF
+    assert cpu.z == 0x00
+    assert cpu.n == 0x01
+
+def test_LDY_ZPG():
+    bus = Bus(Memory([0xA4, 0x06, 0xA4, 0x07, 0xA4, 0x08, 0x00, 0x01, 0xFF]))
+    cpu = CPU(bus)
+    cpu.Y = 0xEA
+
+    cpu.step()
+    assert cpu.Y == 0x00
+    assert cpu.z == 0x01
+    assert cpu.n == 0x00
+
+    cpu.step()
+    assert cpu.Y == 0x01
+    assert cpu.z == 0x00
+    assert cpu.n == 0x00
+
+    cpu.step()
+    assert cpu.Y == 0xFF
+    assert cpu.z == 0x00
+    assert cpu.n == 0x01

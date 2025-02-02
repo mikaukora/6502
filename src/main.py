@@ -97,16 +97,34 @@ class CPU:
                     self.A = self.data
                     self.z = self.calc_z(self.A)
                     self.n = self.calc_n(self.A)
+                elif self.addressing_mode == m.ZPG:
+                    self.fetch()
+                    src = self.data
+                    self.A = self.read(src)
+                    self.z = self.calc_z(self.A)
+                    self.n = self.calc_n(self.A)
             case i.LDX:
                 if self.addressing_mode == m.IMM:
                     self.fetch()
                     self.X = self.data
                     self.z = self.calc_z(self.X)
                     self.n = self.calc_n(self.X)
+                elif self.addressing_mode == m.ZPG:
+                    self.fetch()
+                    src = self.data
+                    self.X = self.read(src)
+                    self.z = self.calc_z(self.X)
+                    self.n = self.calc_n(self.X)
             case i.LDY:
                 if self.addressing_mode == m.IMM:
                     self.fetch()
                     self.Y = self.data
+                    self.z = self.calc_z(self.Y)
+                    self.n = self.calc_n(self.Y)
+                elif self.addressing_mode == m.ZPG:
+                    self.fetch()
+                    src = self.data
+                    self.Y = self.read(src)
                     self.z = self.calc_z(self.Y)
                     self.n = self.calc_n(self.Y)
             case i.STA:
