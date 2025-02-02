@@ -7,14 +7,18 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "mypy" },
+]
+
+[package.dev-dependencies]
+dev = [
     { name = "pytest" },
 ]
 
 [package.metadata]
-requires-dist = [
-    { name = "mypy", specifier = ">=1.14.1" },
-    { name = "pytest", specifier = ">=8.3.4" },
-]
+requires-dist = [{ name = "mypy", specifier = ">=1.14.1" }]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=8.3.4" }]
 
 [[package]]
 name = "colorama"
