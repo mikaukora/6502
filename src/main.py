@@ -376,27 +376,27 @@ class CPU:
 
     @P.setter
     def P(self, value):
-        self._P = uint8(value) & 0x7F
+        self._P = uint8(value) & 0xFF
 
     @property
     def n(self):
-        return self._P >> 6 & 0x01
+        return (self._P >> 7) & 0x01
 
     @n.setter
     def n(self, value):
-        self._P = self._P & ~(1 << 6) | bit(value) << 6
+        self._P = self._P & ~(1 << 7) | bit(value) << 7
 
     @property
     def v(self):
-        return self._P >> 5 & 0x01
+        return (self._P >> 6) & 0x01
 
     @v.setter
     def v(self, value):
-        self._P = self._P & ~(1 << 5) | bit(value) << 5
+        self._P = self._P & ~(1 << 6) | bit(value) << 6
 
     @property
     def b(self):
-        return self._P >> 4 & 0x01
+        return (self._P >> 4) & 0x01
 
     @b.setter
     def b(self, value):
@@ -404,7 +404,7 @@ class CPU:
 
     @property
     def d(self):
-        return self._P >> 3 & 0x01
+        return (self._P >> 3) & 0x01
 
     @d.setter
     def d(self, value):
@@ -412,7 +412,7 @@ class CPU:
 
     @property
     def i(self):
-        return self._P >> 2 & 0x01
+        return (self._P >> 2) & 0x01
 
     @i.setter
     def i(self, value):
@@ -420,7 +420,7 @@ class CPU:
 
     @property
     def z(self):
-        return self._P >> 1 & 0x01
+        return (self._P >> 1) & 0x01
 
     @z.setter
     def z(self, value):
