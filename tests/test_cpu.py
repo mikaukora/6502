@@ -445,3 +445,29 @@ def test_INY_DEY():
     assert cpu.Y == 0xFF
     assert cpu.z == 0
     assert cpu.n == 1
+
+def test_DEC_INC_ZPG():
+    memory = Memory([0xC6, 0x08, 0xC6, 0x08, 0xE6, 0x08, 0xE6, 0x08, 0x00])
+    bus = Bus(memory)
+    cpu = CPU(bus)
+    cpu.Y = 0
+
+    cpu.step()
+    assert memory.data[0x08] == 0xFF
+    assert cpu.z == 0
+    assert cpu.n == 1
+
+    cpu.step()
+    assert memory.data[0x08] == 0xFE
+    assert cpu.z == 0
+    assert cpu.n == 1
+
+    cpu.step()
+    assert memory.data[0x08] == 0xFF
+    assert cpu.z == 0
+    assert cpu.n == 1
+
+    cpu.step()
+    assert memory.data[0x08] == 0x00
+    assert cpu.z == 1
+    assert cpu.n == 0

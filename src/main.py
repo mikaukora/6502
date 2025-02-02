@@ -72,6 +72,10 @@ class CPU:
         self.data = self.bus.memory_read()
         self.PC += 1
 
+    def read(self, address):
+        self.bus.address = address
+        return self.bus.memory_read()
+
     def write(self, address, value):
         self.bus.address = address
         self.bus.memory_write(value)
@@ -186,6 +190,26 @@ class CPU:
                     self.Y = (self.Y - 1) % 0x100
                     self.z = self.calc_z(self.Y)
                     self.n = self.calc_n(self.Y)
+            case i.DEC:
+                if self.addressing_mode == m.ZPG:
+                    self.fetch()
+                    dst = self.data
+                    value = self.read(dst)
+                    value = (value - 1) % 0x100
+                    self.z = self.calc_z(value)
+                    self.n = self.calc_n(value)
+                    self.write(dst, value)
+            case i.INC:
+                if self.addressing_mode == m.ZPG:
+                    self.fetch()
+                    dst = self.data
+                    value = self.read(dst)
+                    value = (value + 1) % 0x100
+                    self.z = self.calc_z(value)
+                    self.n = self.calc_n(value)
+                    self.write(dst, value)
+
+
     """
         Starts from the address in PC.
     """
