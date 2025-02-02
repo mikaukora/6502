@@ -393,3 +393,55 @@ def test_SEI():
     assert cpu.i == 1
     cpu.step()
     assert cpu.i == 1
+
+def test_INX_DEX():
+    bus = Bus(Memory([0xE8, 0xE8, 0xCA, 0xCA, 0xCA]))
+    cpu = CPU(bus)
+    cpu.X = 0
+
+    cpu.step()
+    assert cpu.X == 0x01
+    assert cpu.z == 0
+    assert cpu.n == 0
+    cpu.step()
+    assert cpu.X == 0x02
+    assert cpu.z == 0
+    assert cpu.n == 0
+    cpu.step()
+    assert cpu.X == 0x01
+    assert cpu.z == 0
+    assert cpu.n == 0
+    cpu.step()
+    assert cpu.X == 0x00
+    assert cpu.z == 1
+    assert cpu.n == 0
+    cpu.step()
+    assert cpu.X == 0xFF
+    assert cpu.z == 0
+    assert cpu.n == 1
+
+def test_INY_DEY():
+    bus = Bus(Memory([0xC8, 0xC8, 0x88, 0x88, 0x88]))
+    cpu = CPU(bus)
+    cpu.Y = 0
+
+    cpu.step()
+    assert cpu.Y == 0x01
+    assert cpu.z == 0
+    assert cpu.n == 0
+    cpu.step()
+    assert cpu.Y == 0x02
+    assert cpu.z == 0
+    assert cpu.n == 0
+    cpu.step()
+    assert cpu.Y == 0x01
+    assert cpu.z == 0
+    assert cpu.n == 0
+    cpu.step()
+    assert cpu.Y == 0x00
+    assert cpu.z == 1
+    assert cpu.n == 0
+    cpu.step()
+    assert cpu.Y == 0xFF
+    assert cpu.z == 0
+    assert cpu.n == 1

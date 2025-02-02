@@ -166,6 +166,26 @@ class CPU:
             case i.SEI:
                 if self.addressing_mode == m.IMPL:
                     self.i = 1
+            case i.INX:
+                if self.addressing_mode == m.IMPL:
+                    self.X = (self.X + 1) % 0x100
+                    self.z = self.calc_z(self.X)
+                    self.n = self.calc_n(self.X)
+            case i.INY:
+                if self.addressing_mode == m.IMPL:
+                    self.Y = (self.Y + 1) % 0x100
+                    self.z = self.calc_z(self.Y)
+                    self.n = self.calc_n(self.Y)
+            case i.DEX:
+                if self.addressing_mode == m.IMPL:
+                    self.X = (self.X - 1) % 0x100
+                    self.z = self.calc_z(self.X)
+                    self.n = self.calc_n(self.X)
+            case i.DEY:
+                if self.addressing_mode == m.IMPL:
+                    self.Y = (self.Y - 1) % 0x100
+                    self.z = self.calc_z(self.Y)
+                    self.n = self.calc_n(self.Y)
     """
         Starts from the address in PC.
     """

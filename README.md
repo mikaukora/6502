@@ -26,6 +26,11 @@ The emulator currently supports the following 6502 instructions:
   - `TXA` - Transfer X to accumulator
   - `TXS` - Transfer X to stack pointer
   - `TYA` - Transfer Y accumulator
+- **Decrements % Increments**
+  - `DEX` - Decrement X
+  - `DEY` - Decrement Y
+  - `INX` - Increment X
+  - `INY` - Increment Y
 - **Flag Instructions**
   - `CLC` - Clear Carry
   - `CLD` - Clear Decimal (BCD arithmetics disabled)
