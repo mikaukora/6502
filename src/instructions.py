@@ -1,4 +1,4 @@
-from typing import Tuple, Optional
+from typing import List, Tuple, Optional
 from enum import Enum
 
 # Instruction set: https://www.masswerk.at/6502/6502_instruction_set.html#LDA
@@ -79,7 +79,7 @@ m = AddressingMode
 
 # 6502 standard set
 # fmt: off
-standard = [
+standard: List[List[Optional[Tuple[Instruction, AddressingMode]]]] = [
         #0     1     2     3     4     5     6     7     8     9     A     B     C     D     E     F
         [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], # 0
         [None, None, None, None, None, None, None, None, (i.CLC, m.IMPL), None, None, None, None, None, None, None], # 1
@@ -96,7 +96,7 @@ standard = [
         [None, None, None, None, None, None, (i.DEC, m.ZPG), None, (i.INY, m.IMPL), None, (i.DEX, m.IMPL), None, None, None, None, None], # C
         [None, None, None, None, None, None, None, None, (i.CLD, m.IMPL), None, None, None, None, None, None, None], # D
         [None, None, None, None, None, None, (i.INC, m.ZPG), None, (i.INX, m.IMPL), None, (i.NOP, m.IMPL), None, None, None, None, None], # E
-        [None, None, None, None, None, None, None, None, (i.SED, m.IMPL), None, None, None, None, None, None, 1], # F
+        [None, None, None, None, None, None, None, None, (i.SED, m.IMPL), None, None, None, None, None, None, None], # F
     ]
 # fmt: on
 
