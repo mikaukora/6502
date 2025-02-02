@@ -44,6 +44,8 @@ The emulator currently supports the following 6502 instructions:
 - **Other**
   - `NOP` - No Operation
 
+Run ```./list_instructions.py``` for the full list.
+
 ## Supported Addressing Modes
 
 - **Immediate** (`#value`)
