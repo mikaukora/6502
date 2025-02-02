@@ -1,3 +1,4 @@
+import sys
 from instructions import decode_standard, i, m
 
 
@@ -66,6 +67,24 @@ class CPU:
         self.bus = bus
         self.instruction = None
         self.addressing_mode = None
+
+    def __str__(self):
+        GREEN = "\033[92m"
+        RESET = "\033[0m"
+        return (
+            f"{GREEN}"
+            f" A: {cpu.A:#04x}\t: X: {cpu.X:#04x}\tY: {cpu.Y:#04x}\t\tS: {cpu.S:#04x}\n"
+            f"P: {cpu.P:#04x}\t"
+            f"Z: {cpu.z} "
+            f"N: {cpu.n} "
+            f"V: {cpu.v} "
+            f"B: {cpu.b} "
+            f"D: {cpu.d} "
+            f"I: {cpu.i} "
+            f"C: {cpu.c}\n"
+            f"PC: {cpu.PC:#06x}"
+            f"{RESET}"
+        )
 
     def fetch(self):
         self.bus.address = self.PC
@@ -299,6 +318,14 @@ class CPU:
             self.decode()
             self.execute()
 
+    def run(self):
+        mem_end = len(self.bus.memory.data)
+        while self.PC < mem_end:
+            self.fetch()
+            self.decode()
+            self.execute()
+        print("End of program")
+
     def reset(self):
         # TODO: start sequence, read reset vector, jump
         pass
@@ -406,3 +433,25 @@ class CPU:
     @c.setter
     def c(self, value):
         self._P = self._P & ~(1) | bit(value)
+
+
+if __name__ == "__main__":
+    filename = len(sys.argv) > 1 and sys.argv[1] or None
+    if not filename:
+        print("Error: Missing filename")
+        sys.exit(1)
+    print(f"Using file {filename}")
+
+    try:
+        data = bytearray(open(filename, "rb").read())
+    except Exception as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+
+    memory = Memory(bytearray(data))
+    print(f"Memory: {memory}")
+    bus = Bus(memory)
+    cpu = CPU(bus)
+    print(cpu)
+    cpu.run()
+    print(cpu)

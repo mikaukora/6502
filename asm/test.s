@@ -1,2 +1,2 @@
 _start:
-        LDA #00
+        LDA #$ea

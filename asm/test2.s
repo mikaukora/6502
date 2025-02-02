@@ -1,5 +1,5 @@
 _start:
-        LDA #00
+        LDA #$01
         TAX
         DEX
-        INX
+        DEX

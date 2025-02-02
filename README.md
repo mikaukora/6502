@@ -1,12 +1,12 @@
 # 6502 Emulator
 
-A Python-based emulator for the 8-bit MOS 6502 processor. This project is currently a work in progress.
+A Python-based emulator designed to help learn and experiment with 6502 assembly and machine language. This project is a work in progress, with a focus on understanding the inner workings of the 6502 processor.
 
 ## Features
 
 - Supports basic 6502 instructions and addressing modes.
 - Implements a simple CPU, bus, and memory model.
-- Can execute multiple instructions sequentially.
+- Can execute programs provided as raw binary files.
 - Provides unit tests to verify instruction execution.
 
 ## Supported Instructions
@@ -53,7 +53,44 @@ The emulator currently supports the following 6502 instructions:
 
 ## Running
 
-At this stage, the emulator is under active development, and no standalone running is provided. However, unit tests are available to verify functionality.
+### Compiling example programs
+
+To compile the example programs into raw binary format, run:
+
+```sh
+pushd asm && make && popd
+```
+
+### Running the emulator with a binary file
+
+You can run the emulator with a raw binary file by providing it as an argument:
+
+```sh
+python src/main.py asm/test.bin
+```
+
+This will output the status of the CPU after each instruction, such as:
+
+```sh
+Using file asm/test2.bin
+Memory: ['a9', '01', 'aa', 'ca', 'ca']
+ A: 0x00        : X: 0x00       Y: 0x00         S: 0x00
+P: 0x00 Z: 0 N: 0 V: 0 B: 0 D: 0 I: 0 C: 0
+PC: 0x0000
+R 0x0000: a9
+0xa9 LDA #
+R 0x0001: 1
+R 0x0002: aa
+0xaa TAX impl
+R 0x0003: ca
+0xca DEX impl
+R 0x0004: ca
+0xca DEX impl
+End of program
+ A: 0x01        : X: 0xff       Y: 0x00         S: 0x00
+P: 0x40 Z: 0 N: 1 V: 0 B: 0 D: 0 I: 0 C: 0
+PC: 0x0005
+```
 
 ## Running Tests
 
