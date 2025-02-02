@@ -107,4 +107,4 @@ def decode_standard(instruction) -> Optional[Tuple[Instruction, AddressingMode]]
         print(f"{instruction:#04x} {i.value} {m.value}")
         return i, m
     except TypeError:
-        raise NotImplementedError(f'Unknown instruction {instruction:#04x}')
+        raise NotImplementedError(f"Unknown instruction {instruction:#04x}")

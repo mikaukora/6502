@@ -108,7 +108,7 @@ class CPU:
                     ll = self.data
                     self.fetch()
                     hh = self.data
-                    self.A = self.read(toUint16(hh,ll))
+                    self.A = self.read(toUint16(hh, ll))
                     self.z = self.calc_z(self.A)
                     self.n = self.calc_n(self.A)
             case i.LDX:
@@ -128,7 +128,7 @@ class CPU:
                     ll = self.data
                     self.fetch()
                     hh = self.data
-                    self.X = self.read(toUint16(hh,ll))
+                    self.X = self.read(toUint16(hh, ll))
                     self.z = self.calc_z(self.X)
                     self.n = self.calc_n(self.X)
             case i.LDY:
@@ -148,7 +148,7 @@ class CPU:
                     ll = self.data
                     self.fetch()
                     hh = self.data
-                    self.Y = self.read(toUint16(hh,ll))
+                    self.Y = self.read(toUint16(hh, ll))
                     self.z = self.calc_z(self.Y)
                     self.n = self.calc_n(self.Y)
             case i.STA:
@@ -160,7 +160,7 @@ class CPU:
                     ll = self.data
                     self.fetch()
                     hh = self.data
-                    self.write(toUint16(hh,ll), self.A)
+                    self.write(toUint16(hh, ll), self.A)
             case i.STX:
                 if self.addressing_mode == m.ZPG:
                     self.fetch()
@@ -170,7 +170,7 @@ class CPU:
                     ll = self.data
                     self.fetch()
                     hh = self.data
-                    self.write(toUint16(hh,ll), self.X)
+                    self.write(toUint16(hh, ll), self.X)
             case i.STY:
                 if self.addressing_mode == m.ZPG:
                     self.fetch()
@@ -180,7 +180,7 @@ class CPU:
                     ll = self.data
                     self.fetch()
                     hh = self.data
-                    self.write(toUint16(hh,ll), self.Y)
+                    self.write(toUint16(hh, ll), self.Y)
             case i.TAX:
                 if self.addressing_mode == m.IMPL:
                     self.X = self.A
@@ -264,11 +264,11 @@ class CPU:
                     ll = self.data
                     self.fetch()
                     hh = self.data
-                    value = self.read(toUint16(hh,ll))
+                    value = self.read(toUint16(hh, ll))
                     value = (value - 1) % 0x100
                     self.z = self.calc_z(value)
                     self.n = self.calc_n(value)
-                    self.write(toUint16(hh,ll), value)
+                    self.write(toUint16(hh, ll), value)
             case i.INC:
                 if self.addressing_mode == m.ZPG:
                     self.fetch()
@@ -283,11 +283,12 @@ class CPU:
                     ll = self.data
                     self.fetch()
                     hh = self.data
-                    value = self.read(toUint16(hh,ll))
+                    value = self.read(toUint16(hh, ll))
                     value = (value + 1) % 0x100
                     self.z = self.calc_z(value)
                     self.n = self.calc_n(value)
-                    self.write(toUint16(hh,ll), value)
+                    self.write(toUint16(hh, ll), value)
+
     """
         Starts from the address in PC.
     """

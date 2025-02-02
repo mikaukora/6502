@@ -324,6 +324,7 @@ def test_NOP():
     cpu.step()
     assert cpu.PC == 0x05
 
+
 def test_CLC():
     bus = Bus(Memory([0x18, 0x18]))
     cpu = CPU(bus)
@@ -333,6 +334,7 @@ def test_CLC():
     assert cpu.c == 0
     cpu.step()
     assert cpu.c == 0
+
 
 def test_CLD():
     bus = Bus(Memory([0xD8, 0xD8]))
@@ -344,6 +346,7 @@ def test_CLD():
     cpu.step()
     assert cpu.d == 0
 
+
 def test_CLI():
     bus = Bus(Memory([0x58, 0x58]))
     cpu = CPU(bus)
@@ -353,6 +356,7 @@ def test_CLI():
     assert cpu.i == 0
     cpu.step()
     assert cpu.i == 0
+
 
 def test_CLV():
     bus = Bus(Memory([0xB8, 0xB8]))
@@ -364,6 +368,7 @@ def test_CLV():
     cpu.step()
     assert cpu.v == 0
 
+
 def test_SEC():
     bus = Bus(Memory([0x38, 0x38]))
     cpu = CPU(bus)
@@ -373,6 +378,7 @@ def test_SEC():
     assert cpu.c == 1
     cpu.step()
     assert cpu.c == 1
+
 
 def test_SED():
     bus = Bus(Memory([0xF8, 0xF8]))
@@ -384,6 +390,7 @@ def test_SED():
     cpu.step()
     assert cpu.d == 1
 
+
 def test_SEI():
     bus = Bus(Memory([0x78, 0x78]))
     cpu = CPU(bus)
@@ -393,6 +400,7 @@ def test_SEI():
     assert cpu.i == 1
     cpu.step()
     assert cpu.i == 1
+
 
 def test_INX_DEX():
     bus = Bus(Memory([0xE8, 0xE8, 0xCA, 0xCA, 0xCA]))
@@ -420,6 +428,7 @@ def test_INX_DEX():
     assert cpu.z == 0
     assert cpu.n == 1
 
+
 def test_INY_DEY():
     bus = Bus(Memory([0xC8, 0xC8, 0x88, 0x88, 0x88]))
     cpu = CPU(bus)
@@ -445,6 +454,7 @@ def test_INY_DEY():
     assert cpu.Y == 0xFF
     assert cpu.z == 0
     assert cpu.n == 1
+
 
 def test_DEC_INC_ZPG():
     memory = Memory([0xC6, 0x08, 0xC6, 0x08, 0xE6, 0x08, 0xE6, 0x08, 0x00])
@@ -493,6 +503,7 @@ def test_LDA_ZPG():
     assert cpu.z == 0x00
     assert cpu.n == 0x01
 
+
 def test_LDX_ZPG():
     bus = Bus(Memory([0xA6, 0x06, 0xA6, 0x07, 0xA6, 0x08, 0x00, 0x01, 0xFF]))
     cpu = CPU(bus)
@@ -512,6 +523,7 @@ def test_LDX_ZPG():
     assert cpu.X == 0xFF
     assert cpu.z == 0x00
     assert cpu.n == 0x01
+
 
 def test_LDY_ZPG():
     bus = Bus(Memory([0xA4, 0x06, 0xA4, 0x07, 0xA4, 0x08, 0x00, 0x01, 0xFF]))
@@ -533,6 +545,7 @@ def test_LDY_ZPG():
     assert cpu.z == 0x00
     assert cpu.n == 0x01
 
+
 def test_LDA_ABS():
     bus = Bus(Memory([0xAD, 0x06, 0x00, 0xAD, 0x07, 0x00, 0x00, 0xFF]))
     cpu = CPU(bus)
@@ -547,6 +560,7 @@ def test_LDA_ABS():
     assert cpu.A == 0xFF
     assert cpu.z == 0x00
     assert cpu.n == 0x01
+
 
 def test_LDX_ABS():
     bus = Bus(Memory([0xAE, 0x06, 0x00, 0xAE, 0x07, 0x00, 0x00, 0xFF]))
@@ -563,6 +577,7 @@ def test_LDX_ABS():
     assert cpu.z == 0x00
     assert cpu.n == 0x01
 
+
 def test_LDY_ABS():
     bus = Bus(Memory([0xAC, 0x06, 0x00, 0xAC, 0x07, 0x00, 0x00, 0xFF]))
     cpu = CPU(bus)
@@ -578,6 +593,7 @@ def test_LDY_ABS():
     assert cpu.z == 0x00
     assert cpu.n == 0x01
 
+
 def test_STA_ABS():
     memory = Memory([0x8D, 0x06, 0x00, 0x8D, 0x07, 0x00, 0x00, 0x00])
     bus = Bus(memory)
@@ -588,6 +604,7 @@ def test_STA_ABS():
     assert memory.data[(0x00 << 8) + 0x06] == 0xEA
     cpu.step()
     assert memory.data[(0x00 << 8) + 0x07] == 0xEA
+
 
 def test_STX_ABS():
     memory = Memory([0x8E, 0x06, 0x00, 0x8E, 0x07, 0x00, 0x00, 0x00])
@@ -600,6 +617,7 @@ def test_STX_ABS():
     cpu.step()
     assert memory.data[(0x00 << 8) + 0x07] == 0xEA
 
+
 def test_STY_ABS():
     memory = Memory([0x8C, 0x06, 0x00, 0x8C, 0x07, 0x00, 0x00, 0x00])
     bus = Bus(memory)
@@ -611,8 +629,11 @@ def test_STY_ABS():
     cpu.step()
     assert memory.data[(0x00 << 8) + 0x07] == 0xEA
 
+
 def test_DEC_INC_ABS():
-    memory = Memory([0xCE, 0x0C, 0x00, 0xCE, 0x0C, 0x00, 0xEE, 0x0C, 0x00, 0xEE, 0x0C, 0x00, 0x00])
+    memory = Memory(
+        [0xCE, 0x0C, 0x00, 0xCE, 0x0C, 0x00, 0xEE, 0x0C, 0x00, 0xEE, 0x0C, 0x00, 0x00]
+    )
     bus = Bus(memory)
     cpu = CPU(bus)
     cpu.Y = 0
