@@ -27,10 +27,13 @@ The emulator currently supports the following 6502 instructions:
   - `TXS` - Transfer X to stack pointer
   - `TYA` - Transfer Y accumulator
 - **Flag Instructions**
-  - `CLC`- Clear Carry
+  - `CLC` - Clear Carry
   - `CLD` - Clear Decimal (BCD arithmetics disabled)
   - `CLI` - Clear Interrupt Disable Bit
   - `CLV` - Clear Overflow Flag
+  - `SEC` - Set Carry
+  - `SED` - Set Decimal (BCD arithmetics disabled)
+  - `SEI` - Set Interrupt Disable Bit
 - **Other**
   - `NOP` - No Operation
 

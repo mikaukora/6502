@@ -363,3 +363,33 @@ def test_CLV():
     assert cpu.v == 0
     cpu.step()
     assert cpu.v == 0
+
+def test_SEC():
+    bus = Bus(Memory([0x38, 0x38]))
+    cpu = CPU(bus)
+    cpu.c = 0
+
+    cpu.step()
+    assert cpu.c == 1
+    cpu.step()
+    assert cpu.c == 1
+
+def test_SED():
+    bus = Bus(Memory([0xF8, 0xF8]))
+    cpu = CPU(bus)
+    cpu.d = 0
+
+    cpu.step()
+    assert cpu.d == 1
+    cpu.step()
+    assert cpu.d == 1
+
+def test_SEI():
+    bus = Bus(Memory([0x78, 0x78]))
+    cpu = CPU(bus)
+    cpu.i = 0
+
+    cpu.step()
+    assert cpu.i == 1
+    cpu.step()
+    assert cpu.i == 1

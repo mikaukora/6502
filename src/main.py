@@ -157,7 +157,15 @@ class CPU:
             case i.CLV:
                 if self.addressing_mode == m.IMPL:
                     self.v = 0
-
+            case i.SEC:
+                if self.addressing_mode == m.IMPL:
+                    self.c = 1
+            case i.SED:
+                if self.addressing_mode == m.IMPL:
+                    self.d = 1
+            case i.SEI:
+                if self.addressing_mode == m.IMPL:
+                    self.i = 1
     """
         Starts from the address in PC.
     """
