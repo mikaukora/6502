@@ -192,6 +192,9 @@ class CPU:
                     self.fetch()
                     hh = self.data
                     self.write(toUint16(hh, ll), self.A)
+                elif self.addressing_mode == m.ZPG_X:
+                    self.fetch()
+                    self.write((self.data + self.X) & 0xFF, self.A)
             case i.STX:
                 if self.addressing_mode == m.ZPG:
                     self.fetch()

@@ -691,3 +691,21 @@ def test_LDY_ZPG_X():
 
     cpu.step()
     assert cpu.Y == 0xDD
+
+
+def test_STA_ZPG_X():
+    memory = Memory([0xA2, 0x08, 0xA9, 0x55, 0x95, 0x00, 0xea, 0xea, 0xDD])
+    bus = Bus(memory)
+    cpu = CPU(bus)
+
+    cpu.step()
+    assert cpu.X == 0x08
+
+    cpu.step()
+    assert cpu.A == 0x55
+
+    cpu.step()
+    assert cpu.X == 0x08
+
+    cpu.step()
+    assert memory.data[0x08] == 0x55
