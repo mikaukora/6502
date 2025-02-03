@@ -215,6 +215,9 @@ class CPU:
                     self.fetch()
                     hh = self.data
                     self.write(toUint16(hh, ll), self.Y)
+                elif self.addressing_mode == m.ZPG_X:
+                    self.fetch()
+                    self.write((self.data + self.X) & 0xFF, self.Y)
             case i.TAX:
                 if self.addressing_mode == m.IMPL:
                     self.X = self.A
