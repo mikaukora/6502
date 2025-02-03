@@ -306,6 +306,14 @@ class CPU:
                     self.z = self.calc_z(value)
                     self.n = self.calc_n(value)
                     self.write(toUint16(hh, ll), value)
+                elif self.addressing_mode == m.ZPG_X:
+                    self.fetch()
+                    dst = (self.data + self.X) & 0xFF
+                    value = self.read(dst)
+                    value = (value - 1) % 0x100
+                    self.z = self.calc_z(value)
+                    self.n = self.calc_n(value)
+                    self.write(dst, value)
             case i.INC:
                 if self.addressing_mode == m.ZPG:
                     self.fetch()
@@ -325,7 +333,14 @@ class CPU:
                     self.z = self.calc_z(value)
                     self.n = self.calc_n(value)
                     self.write(toUint16(hh, ll), value)
-
+                elif self.addressing_mode == m.ZPG_X:
+                    self.fetch()
+                    dst = (self.data + self.X) & 0xFF
+                    value = self.read(dst)
+                    value = (value + 1) % 0x100
+                    self.z = self.calc_z(value)
+                    self.n = self.calc_n(value)
+                    self.write(dst, value)
     """
         Starts from the address in PC.
     """
