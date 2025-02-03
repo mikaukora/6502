@@ -48,9 +48,10 @@ Run ```./list_instructions.py``` for the full list.
 
 ## Supported Addressing Modes
 
-- **Immediate** (`#value`)
-- **Zero Page** (`$00 - $FF`)
-- **Absolute** (`$0000 - $FFFF`)
+- **Immediate** (`#$BB`)
+- **Zero Page** (`$LL`)
+- **Zero Page, X** (`$LL,X`)
+- **Absolute** (`$LLHH`)
 - **Implied**
 
 ## Running

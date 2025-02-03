@@ -657,3 +657,20 @@ def test_DEC_INC_ABS():
     assert memory.data[(0x00 << 8) + 0x0C] == 0x00
     assert cpu.z == 1
     assert cpu.n == 0
+
+
+def test_LDA_ZPG_X():
+    bus = Bus(Memory([0xA2, 0x07, 0xB5, 0x00, 0xE8, 0xB5, 0x00, 0xCC, 0xDD]))
+    cpu = CPU(bus)
+
+    cpu.step()
+    assert cpu.X == 0x07
+
+    cpu.step()
+    assert cpu.A == 0xCC
+
+    cpu.step()
+    assert cpu.X == 0x08
+
+    cpu.step()
+    assert cpu.A == 0xDD
