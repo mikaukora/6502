@@ -756,3 +756,47 @@ def test_DEC_INC_ZPG_X():
     assert memory.data[0x0A] == 0x00
     assert cpu.z == 1
     assert cpu.n == 0
+
+
+def test_LDX_ZPG_Y():
+    bus = Bus(Memory([0xA0, 0x07, 0xB6, 0x00, 0xC8, 0xB6, 0x00, 0xCC, 0xDD]))
+    cpu = CPU(bus)
+
+    cpu.step()
+    assert cpu.Y == 0x07
+
+    cpu.step()
+    assert cpu.X == 0xCC
+
+    cpu.step()
+    assert cpu.Y == 0x08
+
+    cpu.step()
+    assert cpu.X == 0xDD
+
+
+def test_STX_ZPG_Y():
+    memory = Memory([0xA2, 0xEA, 0xA0, 0x0C, 0x96, 0x00, 0xC8, 0x96, 0x00, 0xC8, 0x96, 0x00, 0x22, 0x22, 0x22])
+    bus = Bus(memory)
+    cpu = CPU(bus)
+
+    cpu.step()
+    assert cpu.X == 0xEA
+
+    cpu.step()
+    assert cpu.Y == 0x0C
+
+    cpu.step()
+    assert memory.data[0x0C] == 0xEA
+
+    cpu.step()
+    assert cpu.Y == 0x0D
+
+    cpu.step()
+    assert memory.data[0x0D] == 0xEA
+
+    cpu.step()
+    assert cpu.Y == 0x0E
+
+    cpu.step()
+    assert memory.data[0x0E] == 0xEA

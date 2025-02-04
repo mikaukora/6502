@@ -156,6 +156,12 @@ class CPU:
                     self.X = self.read(toUint16(hh, ll))
                     self.z = self.calc_z(self.X)
                     self.n = self.calc_n(self.X)
+                elif self.addressing_mode == m.ZPG_Y:
+                    self.fetch()
+                    src = self.data
+                    self.X = self.read((src + self.Y) & 0xFF)
+                    self.z = self.calc_z(self.X)
+                    self.n = self.calc_n(self.X)
             case i.LDY:
                 if self.addressing_mode == m.IMM:
                     self.fetch()
@@ -205,6 +211,9 @@ class CPU:
                     self.fetch()
                     hh = self.data
                     self.write(toUint16(hh, ll), self.X)
+                elif self.addressing_mode == m.ZPG_Y:
+                    self.fetch()
+                    self.write((self.data + self.Y) & 0xFF, self.X)
             case i.STY:
                 if self.addressing_mode == m.ZPG:
                     self.fetch()
