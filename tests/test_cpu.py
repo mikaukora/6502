@@ -800,3 +800,20 @@ def test_STX_ZPG_Y():
 
     cpu.step()
     assert memory.data[0x0E] == 0xEA
+
+
+def test_LDA_ABS_X():
+    bus = Bus(Memory([0xA2, 0x09, 0xBD, 0x00, 0x00, 0xE8, 0xBD, 0x00, 0x00, 0xCC, 0xDD]))
+    cpu = CPU(bus)
+
+    cpu.step()
+    assert cpu.X == 0x09
+
+    cpu.step()
+    assert cpu.A == 0xCC
+
+    cpu.step()
+    assert cpu.X == 0x0A
+
+    cpu.step()
+    assert cpu.A == 0xDD
