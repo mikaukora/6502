@@ -817,3 +817,20 @@ def test_LDA_ABS_X():
 
     cpu.step()
     assert cpu.A == 0xDD
+
+
+def test_LDA_ABS_Y():
+    bus = Bus(Memory([0xA0, 0x09, 0xB9, 0x00, 0x00, 0xC8, 0xB9, 0x00, 0x00, 0xCC, 0xDD]))
+    cpu = CPU(bus)
+
+    cpu.step()
+    assert cpu.Y == 0x09
+
+    cpu.step()
+    assert cpu.A == 0xCC
+
+    cpu.step()
+    assert cpu.Y == 0x0A
+
+    cpu.step()
+    assert cpu.A == 0xDD

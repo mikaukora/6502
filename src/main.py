@@ -144,6 +144,14 @@ class CPU:
                     self.A = self.read(toUint16(hh, ll) + self.X)
                     self.z = self.calc_z(self.A)
                     self.n = self.calc_n(self.A)
+                elif self.addressing_mode == m.ABS_Y:
+                    self.fetch()
+                    ll = self.data
+                    self.fetch()
+                    hh = self.data
+                    self.A = self.read(toUint16(hh, ll) + self.Y)
+                    self.z = self.calc_z(self.A)
+                    self.n = self.calc_n(self.A)
             case i.LDX:
                 if self.addressing_mode == m.IMM:
                     self.fetch()

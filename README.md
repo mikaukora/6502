@@ -54,6 +54,7 @@ Run ```./list_instructions.py``` for the full list.
 - **Zero Page, Y** (`$LL,Y`)
 - **Absolute** (`$LLHH`)
 - **Absolute, X** (`$LLHH,X`)
+- **Absolute, Y** (`$LLHH,Y`)
 - **Implied**
 
 ## Running
