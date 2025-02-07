@@ -10,24 +10,11 @@ parser.add_argument("-m", "--mode", help="Search for a specific addressing mode 
 args = parser.parse_args()
 
 def accept(code, instruction, mode):
-    def codeFilter(x):
-        return True
-    def instructionFilter(x):
-        return True
-    def modeFilter(x):
-        return True
-
-    if args.code:
-        def codeFilter(code):
-            return code.lower() == args.code.lower()
-    if args.instruction:
-        def instructionFilter(instruction):
-            return instruction.value.lower() == args.instruction.lower()
-    if args.mode:
-        def modeFilter(mode):
-            return mode.value.lower() == args.mode.lower()
-
-    return codeFilter(code) and instructionFilter(instruction) and modeFilter(mode)
+    return (
+        (args.code is None or code.lower() == args.code.lower()) and
+        (args.instruction is None or instruction.value.lower() == args.instruction.lower()) and
+        (args.mode is None or mode.value.lower() == args.mode.lower())
+    )
 
 for i, row in enumerate(standard):
     for j, entry in enumerate(row):
