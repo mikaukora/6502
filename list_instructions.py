@@ -16,12 +16,12 @@ def accept(code, instruction, mode):
         (args.mode is None or mode.value.lower() == args.mode.lower())
     )
 
-for i, row in enumerate(standard):
-    for j, entry in enumerate(row):
-        if entry is None:
-            continue
-        code = f'{i:x}{j:x}'
-        instruction = entry[0]
-        mode = entry[1]
-        if accept(code, instruction, mode):
-                print(f'{code} {instruction.value} {mode.value}')
+entries = [
+    (f'{i:x}{j:x}', entry[0], entry[1])
+    for i, row in enumerate(standard)
+    for j, entry in enumerate(row) if entry
+]
+
+for code, instruction, mode in entries:
+    if accept(code, instruction, mode):
+        print(f'{code} {instruction.value} {mode.value}')
