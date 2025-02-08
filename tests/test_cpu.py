@@ -834,3 +834,23 @@ def test_LDA_ABS_Y():
 
     cpu.step()
     assert cpu.A == 0xDD
+
+"""
+    Test high bytes handling.
+"""
+def test_STA_ABS_hi():
+    program = [0x8D, 0x00, 0x01, 0x8D, 0x00, 0x02, 0x8D, 0x0F, 0x01, 0x8D, 0x0F, 0x02]
+
+    memory = Memory(program + [0xea] * (0x210 - len(program)))
+    bus = Bus(memory)
+    cpu = CPU(bus)
+    cpu.A = 0x00
+
+    cpu.step()
+    assert memory.data[(0x01 << 8) + 0x00] == 0x00
+    cpu.step()
+    assert memory.data[(0x02 << 8) + 0x00] == 0x00
+    cpu.step()
+    assert memory.data[(0x01 << 8) + 0x0F] == 0x00
+    cpu.step()
+    assert memory.data[(0x02 << 8) + 0x0F] == 0x00
