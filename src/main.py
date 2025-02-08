@@ -33,6 +33,9 @@ class Memory:
         self.data[address] = value
         print(f"W {address:#06x}: {self.data[address]:x}")
 
+    def dump(self):
+        for i in range(0, len(self.data), 16):
+            print(f"{i:04x}\t{' '.join(f'{x:02x}' for x in self.data[i:i+16])}")
 
 class Bus:
     def __init__(self, memory):
@@ -73,7 +76,7 @@ class CPU:
         RESET = "\033[0m"
         return (
             f"{GREEN}"
-            f" A: {cpu.A:#04x}\t: X: {cpu.X:#04x}\tY: {cpu.Y:#04x}\t\tS: {cpu.S:#04x}\n"
+            f"A: {cpu.A:#04x}\tX: {cpu.X:#04x}\tY: {cpu.Y:#04x}\tS: {cpu.S:#04x}\n"
             f"P: {cpu.P:#04x}\t"
             f"Z: {cpu.z} "
             f"N: {cpu.n} "
@@ -507,9 +510,10 @@ if __name__ == "__main__":
         sys.exit(1)
 
     memory = Memory(bytearray(data))
-    print(f"Memory: {memory}")
+    memory.dump()
     bus = Bus(memory)
     cpu = CPU(bus)
     print(cpu)
     cpu.run()
     print(cpu)
+    memory.dump()

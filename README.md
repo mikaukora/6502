@@ -79,8 +79,8 @@ This will output the status of the CPU after each instruction, such as:
 
 ```sh
 Using file asm/test2.bin
-Memory: ['a9', '01', 'aa', 'ca', 'ca']
- A: 0x00        : X: 0x00       Y: 0x00         S: 0x00
+0000    a9 01 aa ca ca
+A: 0x00 X: 0x00 Y: 0x00 S: 0x00
 P: 0x00 Z: 0 N: 0 V: 0 B: 0 D: 0 I: 0 C: 0
 PC: 0x0000
 R 0x0000: a9
@@ -93,9 +93,10 @@ R 0x0003: ca
 R 0x0004: ca
 0xca DEX impl
 End of program
- A: 0x01        : X: 0xff       Y: 0x00         S: 0x00
-P: 0x40 Z: 0 N: 1 V: 0 B: 0 D: 0 I: 0 C: 0
+A: 0x01 X: 0xff Y: 0x00 S: 0x00
+P: 0x80 Z: 0 N: 1 V: 0 B: 0 D: 0 I: 0 C: 0
 PC: 0x0005
+0000    a9 01 aa ca ca
 ```
 
 ## Running Tests
