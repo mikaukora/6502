@@ -694,7 +694,7 @@ def test_LDY_ZPG_X():
 
 
 def test_STA_ZPG_X():
-    memory = Memory([0xA2, 0x08, 0xA9, 0x55, 0x95, 0x00, 0xea, 0xea, 0xDD])
+    memory = Memory([0xA2, 0x08, 0xA9, 0x55, 0x95, 0x00, 0xEA, 0xEA, 0xDD])
     bus = Bus(memory)
     cpu = CPU(bus)
 
@@ -712,7 +712,7 @@ def test_STA_ZPG_X():
 
 
 def test_STY_ZPG_X():
-    memory = Memory([0xA2, 0x08, 0xA0, 0x55, 0x94, 0x00, 0xea, 0xea, 0xDD])
+    memory = Memory([0xA2, 0x08, 0xA0, 0x55, 0x94, 0x00, 0xEA, 0xEA, 0xDD])
     bus = Bus(memory)
     cpu = CPU(bus)
 
@@ -776,7 +776,25 @@ def test_LDX_ZPG_Y():
 
 
 def test_STX_ZPG_Y():
-    memory = Memory([0xA2, 0xEA, 0xA0, 0x0C, 0x96, 0x00, 0xC8, 0x96, 0x00, 0xC8, 0x96, 0x00, 0x22, 0x22, 0x22])
+    memory = Memory(
+        [
+            0xA2,
+            0xEA,
+            0xA0,
+            0x0C,
+            0x96,
+            0x00,
+            0xC8,
+            0x96,
+            0x00,
+            0xC8,
+            0x96,
+            0x00,
+            0x22,
+            0x22,
+            0x22,
+        ]
+    )
     bus = Bus(memory)
     cpu = CPU(bus)
 
@@ -803,7 +821,9 @@ def test_STX_ZPG_Y():
 
 
 def test_LDA_ABS_X():
-    bus = Bus(Memory([0xA2, 0x09, 0xBD, 0x00, 0x00, 0xE8, 0xBD, 0x00, 0x00, 0xCC, 0xDD]))
+    bus = Bus(
+        Memory([0xA2, 0x09, 0xBD, 0x00, 0x00, 0xE8, 0xBD, 0x00, 0x00, 0xCC, 0xDD])
+    )
     cpu = CPU(bus)
 
     cpu.step()
@@ -820,7 +840,9 @@ def test_LDA_ABS_X():
 
 
 def test_LDA_ABS_Y():
-    bus = Bus(Memory([0xA0, 0x09, 0xB9, 0x00, 0x00, 0xC8, 0xB9, 0x00, 0x00, 0xCC, 0xDD]))
+    bus = Bus(
+        Memory([0xA0, 0x09, 0xB9, 0x00, 0x00, 0xC8, 0xB9, 0x00, 0x00, 0xCC, 0xDD])
+    )
     cpu = CPU(bus)
 
     cpu.step()
@@ -835,13 +857,16 @@ def test_LDA_ABS_Y():
     cpu.step()
     assert cpu.A == 0xDD
 
+
 """
     Test high bytes handling.
 """
+
+
 def test_STA_ABS_hi():
     program = [0x8D, 0x00, 0x01, 0x8D, 0x00, 0x02, 0x8D, 0x0F, 0x01, 0x8D, 0x0F, 0x02]
 
-    memory = Memory(program + [0xea] * (0x210 - len(program)))
+    memory = Memory(program + [0xEA] * (0x210 - len(program)))
     bus = Bus(memory)
     cpu = CPU(bus)
     cpu.A = 0x00
@@ -854,3 +879,81 @@ def test_STA_ABS_hi():
     assert memory.data[(0x01 << 8) + 0x0F] == 0x00
     cpu.step()
     assert memory.data[(0x02 << 8) + 0x0F] == 0x00
+
+
+def test_CMP_IMM():
+    bus = Bus(Memory([0xA9, 0x0F, 0xC9, 0x0F, 0xC9, 0x0E, 0xC9, 0x10]))
+    cpu = CPU(bus)
+
+    cpu.step()
+    assert cpu.A == 0x0F
+
+    cpu.step()
+    #  0x0F - 0x0F = 0, A == M
+    assert cpu.z == 1
+    assert cpu.c == 1
+    assert cpu.n == 0
+
+    #  0x0F - 0x0E = 1, A > M
+    cpu.step()
+    assert cpu.z == 0
+    assert cpu.c == 1
+    assert cpu.n == 0
+
+    #  0x0F - 0x10 = -1, A < M
+    cpu.step()
+    assert cpu.z == 0
+    assert cpu.c == 0
+    assert cpu.n == 1
+
+
+def test_CPX_IMM():
+    bus = Bus(Memory([0xA2, 0x0F, 0xE0, 0x0F, 0xE0, 0x0E, 0xE0, 0x10]))
+    cpu = CPU(bus)
+
+    cpu.step()
+    assert cpu.X == 0x0F
+
+    cpu.step()
+    #  0x0F - 0x0F = 0, X == M
+    assert cpu.z == 1
+    assert cpu.c == 1
+    assert cpu.n == 0
+
+    #  0x0F - 0x0E = 1, X > M
+    cpu.step()
+    assert cpu.z == 0
+    assert cpu.c == 1
+    assert cpu.n == 0
+
+    #  0x0F - 0x10 = -1, X < M
+    cpu.step()
+    assert cpu.z == 0
+    assert cpu.c == 0
+    assert cpu.n == 1
+
+
+def test_CPY_IMM():
+    bus = Bus(Memory([0xA0, 0x0F, 0xC0, 0x0F, 0xC0, 0x0E, 0xC0, 0x10]))
+    cpu = CPU(bus)
+
+    cpu.step()
+    assert cpu.Y == 0x0F
+
+    cpu.step()
+    #  0x0F - 0x0F = 0,Y == M
+    assert cpu.z == 1
+    assert cpu.c == 1
+    assert cpu.n == 0
+
+    #  0x0F - 0x0E = 1, Y > M
+    cpu.step()
+    assert cpu.z == 0
+    assert cpu.c == 1
+    assert cpu.n == 0
+
+    #  0x0F - 0x10 = -1, Y < M
+    cpu.step()
+    assert cpu.z == 0
+    assert cpu.c == 0
+    assert cpu.n == 1

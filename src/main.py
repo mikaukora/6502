@@ -35,7 +35,8 @@ class Memory:
 
     def dump(self):
         for i in range(0, len(self.data), 16):
-            print(f"{i:04x}\t{' '.join(f'{x:02x}' for x in self.data[i:i+16])}")
+            print(f"{i:04x}\t{' '.join(f'{x:02x}' for x in self.data[i : i + 16])}")
+
 
 class Bus:
     def __init__(self, memory):
@@ -369,6 +370,31 @@ class CPU:
                     self.z = self.calc_z(value)
                     self.n = self.calc_n(value)
                     self.write(dst, value)
+            case i.CMP:
+                if self.addressing_mode == m.IMM:
+                    self.fetch()
+                    value = self.data
+                    result = self.A - value
+                    self.c = 1 if self.A >= value else 0
+                    self.z = self.calc_z(result)
+                    self.n = self.calc_n(result)
+            case i.CPX:
+                if self.addressing_mode == m.IMM:
+                    self.fetch()
+                    value = self.data
+                    result = self.X - value
+                    self.c = 1 if self.X >= value else 0
+                    self.z = self.calc_z(result)
+                    self.n = self.calc_n(result)
+            case i.CPY:
+                if self.addressing_mode == m.IMM:
+                    self.fetch()
+                    value = self.data
+                    result = self.Y - value
+                    self.c = 1 if self.Y >= value else 0
+                    self.z = self.calc_z(result)
+                    self.n = self.calc_n(result)
+
     """
         Starts from the address in PC.
     """

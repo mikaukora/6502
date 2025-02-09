@@ -41,6 +41,10 @@ The emulator currently supports the following 6502 instructions:
   - `SEC` - Set Carry
   - `SED` - Set Decimal (BCD arithmetics disabled)
   - `SEI` - Set Interrupt Disable Bit
+- **Compare Instructions**
+  - `CMP` - Compare accumulator and operand
+  - `CPX` - Compare X and operand
+  - `CPY` - Compare Y and operand
 - **Other**
   - `NOP` - No Operation
 
