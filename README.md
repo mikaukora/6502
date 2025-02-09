@@ -97,7 +97,7 @@ You can run the emulator with a raw binary file by providing it as an argument:
 python src/main.py asm/test.bin
 ```
 
-This will output the status of the CPU after each instruction, such as:
+This will output the status of the CPU, memory reads/writes and instruction decoding, such as:
 
 ```sh
 Using file asm/test2.bin
