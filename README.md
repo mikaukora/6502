@@ -48,7 +48,25 @@ The emulator currently supports the following 6502 instructions:
 - **Other**
   - `NOP` - No Operation
 
-Run ```./list_instructions.py``` for the full list.
+### List instructions
+
+```./list_instructions.py``` shows up to date list of instructions.
+
+For other options, see ```./list_instructions.py --help```
+
+```sh
+usage: list_instructions.py [-h] [-i INSTRUCTION] [-c CODE] [-m MODE]
+
+List implemented 6502 instructions
+
+options:
+  -h, --help            show this help message and exit
+  -i, --instruction INSTRUCTION
+                        Search for a specific instruction (e.g. LDA)
+  -c, --code CODE       Search for a specific op code (e.g. a5)
+  -m, --mode MODE       Search for a specific addressing mode (e.g. abs)
+```
+
 
 ## Supported Addressing Modes
 
