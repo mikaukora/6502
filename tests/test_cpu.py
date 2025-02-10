@@ -1111,3 +1111,19 @@ def test_LDY_ABS_X():
 
     cpu.step()
     assert cpu.Y == 0xDD
+
+
+def test_JMP_ABS():
+    bus = Bus(
+        Memory([0x4c, 0x05, 0x00, 0xa9, 0x66, 0x4c, 0x09, 0x00, 0x00, 0xa9, 0x55, 0x4c, 0x03, 0x00])
+    )
+    cpu = CPU(bus)
+
+    cpu.step()
+    cpu.step()
+    cpu.step()
+    assert cpu.A == 0x55
+
+    cpu.step()
+    cpu.step()
+    assert cpu.A == 0x66

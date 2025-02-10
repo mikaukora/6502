@@ -85,7 +85,7 @@ standard: List[List[Optional[Tuple[Instruction, AddressingMode]]]] = [
         [None, None, None, None, None, None, None, None, (i.CLC, m.IMPL), None, None, None, None, None, None, None], # 1
         [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], # 2
         [None, None, None, None, None, None, None, None, (i.SEC, m.IMPL), None, None, None, None, None, None, None], # 3
-        [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], # 4
+        [None, None, None, None, None, None, None, None, None, None, None, None, (i.JMP, m.ABS), None, None, None], # 4
         [None, None, None, None, None, None, None, None, (i.CLI, m.IMPL), None, None, None, None, None, None, None], # 5
         [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], # 6
         [None, None, None, None, None, None, None, None, (i.SEI, m.IMPL), None, None, None, None, None, None, None], # 7

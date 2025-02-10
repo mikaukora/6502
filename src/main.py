@@ -34,8 +34,8 @@ class Memory:
         print(f"W {address:#06x}: {self.data[address]:x}")
 
     def dump(self):
-        for i in range(0, len(self.data), 16):
-            print(f"{i:04x}\t{' '.join(f'{x:02x}' for x in self.data[i : i + 16])}")
+        for index in range(0, len(self.data), 16):
+            print(f"{index:04x}\t{' '.join(f'{x:02x}' for x in self.data[index : index + 16])}")
 
 
 class Bus:
@@ -444,7 +444,13 @@ class CPU:
                     self.c = 1 if self.Y >= value else 0
                     self.z = self.calc_z(result)
                     self.n = self.calc_n(result)
-
+            case i.JMP:
+                if self.addressing_mode == m.ABS:
+                    self.fetch()
+                    ll = self.data
+                    self.fetch()
+                    hh = self.data
+                    self.PC = toUint16(hh, ll)
     """
         Starts from the address in PC.
     """

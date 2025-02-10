@@ -67,7 +67,6 @@ options:
   -m, --mode MODE       Search for a specific addressing mode (e.g. abs)
 ```
 
-
 ## Supported Addressing Modes
 
 - **Immediate** (`#$BB`)
