@@ -411,6 +411,23 @@ class CPU:
                     self.c = 1 if self.Y >= value else 0
                     self.z = self.calc_z(result)
                     self.n = self.calc_n(result)
+                elif self.addressing_mode == m.ZPG:
+                    self.fetch()
+                    value = self.read(self.data)
+                    result = self.Y - value
+                    self.c = 1 if self.Y >= value else 0
+                    self.z = self.calc_z(result)
+                    self.n = self.calc_n(result)
+                elif self.addressing_mode == m.ABS:
+                    self.fetch()
+                    ll = self.data
+                    self.fetch()
+                    hh = self.data
+                    value = self.read(toUint16(hh, ll))
+                    result = self.Y - value
+                    self.c = 1 if self.Y >= value else 0
+                    self.z = self.calc_z(result)
+                    self.n = self.calc_n(result)
 
     """
         Starts from the address in PC.

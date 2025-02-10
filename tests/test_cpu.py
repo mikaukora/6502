@@ -1015,3 +1015,61 @@ def test_CPX_ABS():
     assert cpu.z == 0
     assert cpu.c == 0
     assert cpu.n == 1
+
+
+def test_CPY_ZPG():
+    bus = Bus(Memory([0xA0, 0x0F, 0xC4, 0x08, 0xC4, 0x09, 0xC4, 0x0A, 0x0F, 0x0E, 0x10]))
+    cpu = CPU(bus)
+
+    cpu.step()
+    assert cpu.Y == 0x0F
+
+    cpu.step()
+    #  0x0F - 0x0F = 0, Y == M
+    assert cpu.z == 1
+    assert cpu.c == 1
+    assert cpu.n == 0
+
+    #  0x0F - 0x0E = 1, Y > M
+    cpu.step()
+    assert cpu.z == 0
+    assert cpu.c == 1
+    assert cpu.n == 0
+
+    #  0x0F - 0x10 = -1, Y < M
+    cpu.step()
+    assert cpu.z == 0
+    assert cpu.c == 0
+    assert cpu.n == 1
+
+
+def test_CPY_ABS():
+    program = [0xA0, 0x0F, 0xCC, 0x00, 0x01, 0xCC, 0x01, 0x01, 0xCC, 0x02, 0x01]
+
+    memory = Memory(program + [0xEA] * (0x210 - len(program)))
+    memory.data[(0x01 << 8) + 0x00] = 0x0F
+    memory.data[(0x01 << 8) + 0x01] = 0x0E
+    memory.data[(0x01 << 8) + 0x02] = 0x10
+    bus = Bus(memory)
+    cpu = CPU(bus)
+
+    cpu.step()
+    assert cpu.Y == 0x0F
+
+    cpu.step()
+    #  0x0F - 0x0F = 0, Y == M
+    assert cpu.z == 1
+    assert cpu.c == 1
+    assert cpu.n == 0
+
+    #  0x0F - 0x0E = 1, Y > M
+    cpu.step()
+    assert cpu.z == 0
+    assert cpu.c == 1
+    assert cpu.n == 0
+
+    #  0x0F - 0x10 = -1, Y < M
+    cpu.step()
+    assert cpu.z == 0
+    assert cpu.c == 0
+    assert cpu.n == 1
