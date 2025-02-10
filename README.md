@@ -45,6 +45,8 @@ The emulator currently supports the following 6502 instructions:
   - `CMP` - Compare accumulator and operand
   - `CPX` - Compare X and operand
   - `CPY` - Compare Y and operand
+- **Jumps & Subroutines**
+  - `JMP` - Jump
 - **Other**
   - `NOP` - No Operation
 
