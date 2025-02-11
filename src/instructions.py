@@ -55,6 +55,7 @@ class Instruction(Enum):
     INX = "INX"
     NOP = "NOP"
     BEQ = "BEQ"
+    BNE = "BNE"
     SED = "SED"
 
 
@@ -94,9 +95,9 @@ standard: List[List[Optional[Tuple[Instruction, AddressingMode]]]] = [
         [(i.LDY, m.IMM), None, (i.LDX, m.IMM), None, (i.LDY, m.ZPG), (i.LDA, m.ZPG), (i.LDX, m.ZPG), None, (i.TAY, m.IMPL), (i.LDA, m.IMM), (i.TAX, m.IMPL), None, (i.LDY, m.ABS), (i.LDA, m.ABS), (i.LDX, m.ABS), None], # A
         [None, None, None, None, (i.LDY, m.ZPG_X), (i.LDA, m.ZPG_X), (i.LDX, m.ZPG_Y), None, (i.CLV, m.IMPL), (i.LDA, m.ABS_Y), (i.TSX, m.IMPL), None, (i.LDY, m.ABS_X), (i.LDA, m.ABS_X), (i.LDX, m.ABS_Y), None], # B
         [(i.CPY, m.IMM), None, None, None, (i.CPY, m.ZPG), None, (i.DEC, m.ZPG), None, (i.INY, m.IMPL), (i.CMP, m.IMM), (i.DEX, m.IMPL), None, (i.CPY, m.ABS), None, (i.DEC, m.ABS), None], # C
-        [None, None, None, None, None, None, (i.DEC, m.ZPG_X), None, (i.CLD, m.IMPL), None, None, None, None, None, None, None], # D
+        [(i.BNE, m.REL), None, None, None, None, None, (i.DEC, m.ZPG_X), None, (i.CLD, m.IMPL), None, None, None, None, None, None, None], # D
         [(i.CPX, m.IMM), None, None, None, (i.CPX, m.ZPG), None, (i.INC, m.ZPG), None, (i.INX, m.IMPL), None, (i.NOP, m.IMPL), None, (i.CPX, m.ABS), None, (i.INC, m.ABS), None], # E
-        [None, None, None, None, None, None, (i.INC, m.ZPG_X), None, (i.SED, m.IMPL), None, None, None, None, None, None, None], # F
+        [(i.BEQ, m.REL), None, None, None, None, None, (i.INC, m.ZPG_X), None, (i.SED, m.IMPL), None, None, None, None, None, None, None], # F
     ]
 # fmt: on
 

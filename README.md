@@ -45,6 +45,9 @@ The emulator currently supports the following 6502 instructions:
   - `CMP` - Compare accumulator and operand
   - `CPX` - Compare X and operand
   - `CPY` - Compare Y and operand
+- **Conditional Branch Instructions**
+  - `BEQ` - Branch on Equal (zero flag set)
+  - `BNE` - Branch on Not Equal (zero flag clear)
 - **Jumps & Subroutines**
   - `JMP` - Jump
 - **Other**

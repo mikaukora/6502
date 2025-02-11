@@ -1127,3 +1127,43 @@ def test_JMP_ABS():
     cpu.step()
     cpu.step()
     assert cpu.A == 0x66
+
+
+def test_BEQ():
+    bus = Bus(
+        Memory([0xA9, 0x01, 0xF0, 0x05, 0xA9, 0x00, 0xF0, 0x03, 0xa9, 0x55, 0xea, 0xa9, 0xFF])
+    )
+    cpu = CPU(bus)
+
+    cpu.step()
+    assert cpu.A == 0x01
+    assert cpu.z == 0
+
+    cpu.step()
+    cpu.step()
+    assert cpu.A == 0x00
+    assert cpu.z == 1
+
+    cpu.step()
+    cpu.step()
+    assert cpu.A == 0xFF
+
+
+def test_BNE():
+    bus = Bus(
+        Memory([0xA9, 0x00, 0xD0, 0x05, 0xA9, 0x01, 0xD0, 0x03, 0xa9, 0x55, 0xea, 0xa9, 0xFF])
+    )
+    cpu = CPU(bus)
+
+    cpu.step()
+    assert cpu.A == 0x00
+    assert cpu.z == 1
+
+    cpu.step()
+    cpu.step()
+    assert cpu.A == 0x01
+    assert cpu.z == 0
+
+    cpu.step()
+    cpu.step()
+    assert cpu.A == 0xFF

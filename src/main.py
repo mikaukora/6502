@@ -451,6 +451,18 @@ class CPU:
                     self.fetch()
                     hh = self.data
                     self.PC = toUint16(hh, ll)
+            case i.BEQ:
+                if self.addressing_mode == m.REL:
+                    self.fetch()
+                    offset = self.data
+                    if self.z == 1:
+                        self.PC = (self.PC + offset) & 0xFFFF
+            case i.BNE:
+                if self.addressing_mode == m.REL:
+                    self.fetch()
+                    offset = self.data
+                    if self.z == 0:
+                        self.PC = (self.PC + offset) & 0xFFFF
     """
         Starts from the address in PC.
     """
