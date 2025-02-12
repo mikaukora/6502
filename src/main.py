@@ -463,6 +463,18 @@ class CPU:
                     offset = self.data
                     if self.z == 0:
                         self.PC = (self.PC + offset) & 0xFFFF
+            case i.BMI:
+                if self.addressing_mode == m.REL:
+                    self.fetch()
+                    offset = self.data
+                    if self.n == 1:
+                        self.PC = (self.PC + offset) & 0xFFFF
+            case i.BPL:
+                if self.addressing_mode == m.REL:
+                    self.fetch()
+                    offset = self.data
+                    if self.n == 0:
+                        self.PC = (self.PC + offset) & 0xFFFF
     """
         Starts from the address in PC.
     """

@@ -1167,3 +1167,43 @@ def test_BNE():
     cpu.step()
     cpu.step()
     assert cpu.A == 0xFF
+
+
+def test_BMI():
+    bus = Bus(
+        Memory([0xA9, 0x00, 0x30, 0x05, 0xA9, 0xFF, 0x30, 0x03, 0xa9, 0x55, 0xea, 0xa9, 0xEE])
+    )
+    cpu = CPU(bus)
+
+    cpu.step()
+    assert cpu.A == 0x00
+    assert cpu.n == 0
+
+    cpu.step()
+    cpu.step()
+    assert cpu.A == 0xFF
+    assert cpu.n == 1
+
+    cpu.step()
+    cpu.step()
+    assert cpu.A == 0xEE
+
+
+def test_BPL():
+    bus = Bus(
+        Memory([0xA9, 0xFF, 0x10, 0x05, 0xA9, 0x00, 0x10, 0x03, 0xa9, 0x55, 0xea, 0xa9, 0xEE])
+    )
+    cpu = CPU(bus)
+
+    cpu.step()
+    assert cpu.A == 0xFF
+    assert cpu.n == 1
+
+    cpu.step()
+    cpu.step()
+    assert cpu.A == 0x00
+    assert cpu.n == 0
+
+    cpu.step()
+    cpu.step()
+    assert cpu.A == 0xEE

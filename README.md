@@ -48,6 +48,8 @@ The emulator currently supports the following 6502 instructions:
 - **Conditional Branch Instructions**
   - `BEQ` - Branch on Equal (zero flag set)
   - `BNE` - Branch on Not Equal (zero flag clear)
+  - `BMI` - Branch on Result Minus (negative flag set)
+  - `BPL` - Branch on Result Plus (negative flag clear)
 - **Jumps & Subroutines**
   - `JMP` - Jump
 - **Other**
