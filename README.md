@@ -50,6 +50,8 @@ The emulator currently supports the following 6502 instructions:
   - `BNE` - Branch on Not Equal (zero flag clear)
   - `BMI` - Branch on Result Minus (negative flag set)
   - `BPL` - Branch on Result Plus (negative flag clear)
+  - `BCC` - Branch on Carry Clear
+  - `BCS` - Branch on Carry Set
 - **Jumps & Subroutines**
   - `JMP` - Jump
 - **Other**

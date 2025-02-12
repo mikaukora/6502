@@ -1207,3 +1207,39 @@ def test_BPL():
     cpu.step()
     cpu.step()
     assert cpu.A == 0xEE
+
+
+def test_BCS():
+    bus = Bus(Memory([0xA9, 0x0F, 0xC9, 0x0F, 0xB0, 0x02, 0xA9, 0x10, 0xA9, 0xEE]))
+    cpu = CPU(bus)
+
+    cpu.step()
+    assert cpu.A == 0x0F
+
+    cpu.step()
+    assert cpu.z == 1
+    assert cpu.c == 1
+    assert cpu.n == 0
+
+    cpu.step()
+
+    cpu.step()
+    assert cpu.A == 0xEE
+
+
+def test_BCC():
+    bus = Bus(Memory([0xA9, 0x0F, 0xC9, 0x10, 0x90, 0x02, 0xA9, 0x10, 0xA9, 0xEE]))
+    cpu = CPU(bus)
+
+    cpu.step()
+    assert cpu.A == 0x0F
+
+    cpu.step()
+    assert cpu.z == 0
+    assert cpu.c == 0
+    assert cpu.n == 1
+
+    cpu.step()
+
+    cpu.step()
+    assert cpu.A == 0xEE
