@@ -487,6 +487,24 @@ class CPU:
                     offset = self.data
                     if self.c == 0:
                         self.PC = (self.PC + offset) & 0xFFFF
+            case i.AND:
+                if self.addressing_mode == m.IMM:
+                    self.fetch()
+                    self.A = self.A & self.data
+                    self.z = self.calc_z(self.A)
+                    self.n = self.calc_n(self.A)
+            case i.ORA:
+                if self.addressing_mode == m.IMM:
+                    self.fetch()
+                    self.A = self.A | self.data
+                    self.z = self.calc_z(self.A)
+                    self.n = self.calc_n(self.A)
+            case i.EOR:
+                if self.addressing_mode == m.IMM:
+                    self.fetch()
+                    self.A = self.A ^ self.data
+                    self.z = self.calc_z(self.A)
+                    self.n = self.calc_n(self.A)
     """
         Starts from the address in PC.
     """

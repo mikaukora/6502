@@ -1243,3 +1243,36 @@ def test_BCC():
 
     cpu.step()
     assert cpu.A == 0xEE
+
+
+def test_AND():
+    bus = Bus(Memory([0xA9, 0xF0, 0x29, 0xAA]))
+    cpu = CPU(bus)
+
+    cpu.step()
+    assert cpu.A == 0xF0
+
+    cpu.step()
+    assert cpu.A == 0xA0
+
+
+def test_ORA():
+    bus = Bus(Memory([0xA9, 0xF0, 0x09, 0xAA]))
+    cpu = CPU(bus)
+
+    cpu.step()
+    assert cpu.A == 0xF0
+
+    cpu.step()
+    assert cpu.A == 0xFA
+
+
+def test_EOR():
+    bus = Bus(Memory([0xA9, 0xF0, 0x49, 0xAA]))
+    cpu = CPU(bus)
+
+    cpu.step()
+    assert cpu.A == 0xF0
+
+    cpu.step()
+    assert cpu.A == 0x5A

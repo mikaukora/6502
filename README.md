@@ -33,6 +33,10 @@ The emulator currently supports the following 6502 instructions:
   - `INC` - Increment memory
   - `INX` - Increment X
   - `INY` - Increment Y
+- **Logical Operations**
+  - `AND` - AND with Accumulator
+  - `EOR` - XOR with Accumulator
+  - `ORA` - OR with Accumulator
 - **Flag Instructions**
   - `CLC` - Clear Carry
   - `CLD` - Clear Decimal (BCD arithmetics disabled)
