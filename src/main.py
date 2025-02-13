@@ -35,7 +35,9 @@ class Memory:
 
     def dump(self):
         for index in range(0, len(self.data), 16):
-            print(f"{index:04x}\t{' '.join(f'{x:02x}' for x in self.data[index : index + 16])}")
+            print(
+                f"{index:04x}\t{' '.join(f'{x:02x}' for x in self.data[index : index + 16])}"
+            )
 
 
 class Bus:
@@ -112,157 +114,66 @@ class CPU:
     def calc_n(self, data):
         return (data >> 7) & 1
 
+    def get_data(self):
+        self.fetch()
+        if self.addressing_mode == m.IMM:
+            return self.data
+        elif self.addressing_mode == m.ZPG:
+            return self.read(self.data)
+        elif self.addressing_mode == m.ZPG_X:
+            return self.read(uint8(self.data + self.X))
+        elif self.addressing_mode == m.ZPG_Y:
+            return self.read(uint8(self.data + self.Y))
+        elif self.addressing_mode == m.ABS:
+            ll = self.data
+            self.fetch()
+            hh = self.data
+            return self.read(toUint16(hh, ll))
+        elif self.addressing_mode == m.ABS_X:
+            ll = self.data
+            self.fetch()
+            hh = self.data
+            return self.read(toUint16(hh, ll) + self.X)
+        elif self.addressing_mode == m.ABS_Y:
+            ll = self.data
+            self.fetch()
+            hh = self.data
+            return self.read(toUint16(hh, ll) + self.Y)
+
+    def put_data(self):
+        self.fetch()
+        if self.addressing_mode == m.ZPG:
+            return self.data
+        elif self.addressing_mode == m.ABS:
+            ll = self.data
+            self.fetch()
+            hh = self.data
+            return toUint16(hh, ll)
+        elif self.addressing_mode == m.ZPG_X:
+            return uint8(self.data + self.X)
+        elif self.addressing_mode == m.ZPG_Y:
+            return uint8(self.data + self.Y)
+
     def execute(self):
         match self.instruction:
             case i.LDA:
-                if self.addressing_mode == m.IMM:
-                    self.fetch()
-                    self.A = self.data
-                    self.z = self.calc_z(self.A)
-                    self.n = self.calc_n(self.A)
-                elif self.addressing_mode == m.ZPG:
-                    self.fetch()
-                    src = self.data
-                    self.A = self.read(src)
-                    self.z = self.calc_z(self.A)
-                    self.n = self.calc_n(self.A)
-                elif self.addressing_mode == m.ABS:
-                    self.fetch()
-                    ll = self.data
-                    self.fetch()
-                    hh = self.data
-                    self.A = self.read(toUint16(hh, ll))
-                    self.z = self.calc_z(self.A)
-                    self.n = self.calc_n(self.A)
-                elif self.addressing_mode == m.ZPG_X:
-                    self.fetch()
-                    src = self.data
-                    self.A = self.read((src + self.X) & 0xFF)
-                    self.z = self.calc_z(self.A)
-                    self.n = self.calc_n(self.A)
-                elif self.addressing_mode == m.ABS_X:
-                    self.fetch()
-                    ll = self.data
-                    self.fetch()
-                    hh = self.data
-                    self.A = self.read(toUint16(hh, ll) + self.X)
-                    self.z = self.calc_z(self.A)
-                    self.n = self.calc_n(self.A)
-                elif self.addressing_mode == m.ABS_Y:
-                    self.fetch()
-                    ll = self.data
-                    self.fetch()
-                    hh = self.data
-                    self.A = self.read(toUint16(hh, ll) + self.Y)
-                    self.z = self.calc_z(self.A)
-                    self.n = self.calc_n(self.A)
+                self.A = self.get_data()
+                self.z = self.calc_z(self.A)
+                self.n = self.calc_n(self.A)
             case i.LDX:
-                if self.addressing_mode == m.IMM:
-                    self.fetch()
-                    self.X = self.data
-                    self.z = self.calc_z(self.X)
-                    self.n = self.calc_n(self.X)
-                elif self.addressing_mode == m.ZPG:
-                    self.fetch()
-                    src = self.data
-                    self.X = self.read(src)
-                    self.z = self.calc_z(self.X)
-                    self.n = self.calc_n(self.X)
-                elif self.addressing_mode == m.ABS:
-                    self.fetch()
-                    ll = self.data
-                    self.fetch()
-                    hh = self.data
-                    self.X = self.read(toUint16(hh, ll))
-                    self.z = self.calc_z(self.X)
-                    self.n = self.calc_n(self.X)
-                elif self.addressing_mode == m.ZPG_Y:
-                    self.fetch()
-                    src = self.data
-                    self.X = self.read((src + self.Y) & 0xFF)
-                    self.z = self.calc_z(self.X)
-                    self.n = self.calc_n(self.X)
-                elif self.addressing_mode == m.ABS_Y:
-                    self.fetch()
-                    ll = self.data
-                    self.fetch()
-                    hh = self.data
-                    self.X = self.read(toUint16(hh, ll) + self.Y)
-                    self.z = self.calc_z(self.X)
-                    self.n = self.calc_n(self.X)
+                self.X = self.get_data()
+                self.z = self.calc_z(self.X)
+                self.n = self.calc_n(self.X)
             case i.LDY:
-                if self.addressing_mode == m.IMM:
-                    self.fetch()
-                    self.Y = self.data
-                    self.z = self.calc_z(self.Y)
-                    self.n = self.calc_n(self.Y)
-                elif self.addressing_mode == m.ZPG:
-                    self.fetch()
-                    src = self.data
-                    self.Y = self.read(src)
-                    self.z = self.calc_z(self.Y)
-                    self.n = self.calc_n(self.Y)
-                elif self.addressing_mode == m.ABS:
-                    self.fetch()
-                    ll = self.data
-                    self.fetch()
-                    hh = self.data
-                    self.Y = self.read(toUint16(hh, ll))
-                    self.z = self.calc_z(self.Y)
-                    self.n = self.calc_n(self.Y)
-                elif self.addressing_mode == m.ZPG_X:
-                    self.fetch()
-                    src = self.data
-                    self.Y = self.read((src + self.X) & 0xFF)
-                    self.z = self.calc_z(self.Y)
-                    self.n = self.calc_n(self.Y)
-                elif self.addressing_mode == m.ABS_X:
-                    self.fetch()
-                    ll = self.data
-                    self.fetch()
-                    hh = self.data
-                    self.Y = self.read(toUint16(hh, ll) + self.X)
-                    self.z = self.calc_z(self.Y)
-                    self.n = self.calc_n(self.Y)
+                self.Y = self.get_data()
+                self.z = self.calc_z(self.Y)
+                self.n = self.calc_n(self.Y)
             case i.STA:
-                if self.addressing_mode == m.ZPG:
-                    self.fetch()
-                    self.write(self.data, self.A)
-                elif self.addressing_mode == m.ABS:
-                    self.fetch()
-                    ll = self.data
-                    self.fetch()
-                    hh = self.data
-                    self.write(toUint16(hh, ll), self.A)
-                elif self.addressing_mode == m.ZPG_X:
-                    self.fetch()
-                    self.write((self.data + self.X) & 0xFF, self.A)
+                self.write(self.put_data(), self.A)
             case i.STX:
-                if self.addressing_mode == m.ZPG:
-                    self.fetch()
-                    self.write(self.data, self.X)
-                elif self.addressing_mode == m.ABS:
-                    self.fetch()
-                    ll = self.data
-                    self.fetch()
-                    hh = self.data
-                    self.write(toUint16(hh, ll), self.X)
-                elif self.addressing_mode == m.ZPG_Y:
-                    self.fetch()
-                    self.write((self.data + self.Y) & 0xFF, self.X)
+                self.write(self.put_data(), self.X)
             case i.STY:
-                if self.addressing_mode == m.ZPG:
-                    self.fetch()
-                    self.write(self.data, self.Y)
-                elif self.addressing_mode == m.ABS:
-                    self.fetch()
-                    ll = self.data
-                    self.fetch()
-                    hh = self.data
-                    self.write(toUint16(hh, ll), self.Y)
-                elif self.addressing_mode == m.ZPG_X:
-                    self.fetch()
-                    self.write((self.data + self.X) & 0xFF, self.Y)
+                self.write(self.put_data(), self.Y)
             case i.TAX:
                 if self.addressing_mode == m.IMPL:
                     self.X = self.A
@@ -505,6 +416,7 @@ class CPU:
                     self.A = self.A ^ self.data
                     self.z = self.calc_z(self.A)
                     self.n = self.calc_n(self.A)
+
     """
         Starts from the address in PC.
     """
