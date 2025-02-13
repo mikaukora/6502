@@ -175,74 +175,59 @@ class CPU:
             case i.STY:
                 self.write(self.put_data(), self.Y)
             case i.TAX:
-                if self.addressing_mode == m.IMPL:
-                    self.X = self.A
-                    self.z = self.calc_z(self.X)
-                    self.n = self.calc_n(self.X)
+                self.X = self.A
+                self.z = self.calc_z(self.X)
+                self.n = self.calc_n(self.X)
             case i.TAY:
-                if self.addressing_mode == m.IMPL:
-                    self.Y = self.A
-                    self.z = self.calc_z(self.Y)
-                    self.n = self.calc_n(self.Y)
+                self.Y = self.A
+                self.z = self.calc_z(self.Y)
+                self.n = self.calc_n(self.Y)
             case i.TSX:
                 self.X = self.S
                 self.z = self.calc_z(self.X)
                 self.n = self.calc_n(self.X)
             case i.TXA:
-                if self.addressing_mode == m.IMPL:
-                    self.A = self.X
-                    self.z = self.calc_z(self.A)
-                    self.n = self.calc_n(self.A)
+                self.A = self.X
+                self.z = self.calc_z(self.A)
+                self.n = self.calc_n(self.A)
             case i.TXS:
                 self.S = self.X
             case i.TYA:
-                if self.addressing_mode == m.IMPL:
-                    self.A = self.Y
-                    self.z = self.calc_z(self.A)
-                    self.n = self.calc_n(self.A)
+                self.A = self.Y
+                self.z = self.calc_z(self.A)
+                self.n = self.calc_n(self.A)
             case i.NOP:
                 return
             case i.CLC:
-                if self.addressing_mode == m.IMPL:
-                    self.c = 0
+                self.c = 0
             case i.CLD:
-                if self.addressing_mode == m.IMPL:
-                    self.d = 0
+                self.d = 0
             case i.CLI:
-                if self.addressing_mode == m.IMPL:
-                    self.i = 0
+                self.i = 0
             case i.CLV:
-                if self.addressing_mode == m.IMPL:
-                    self.v = 0
+                self.v = 0
             case i.SEC:
-                if self.addressing_mode == m.IMPL:
-                    self.c = 1
+                self.c = 1
             case i.SED:
-                if self.addressing_mode == m.IMPL:
-                    self.d = 1
+                self.d = 1
             case i.SEI:
-                if self.addressing_mode == m.IMPL:
-                    self.i = 1
+                self.i = 1
             case i.INX:
-                if self.addressing_mode == m.IMPL:
-                    self.X = (self.X + 1) % 0x100
-                    self.z = self.calc_z(self.X)
-                    self.n = self.calc_n(self.X)
+                self.X = (self.X + 1) % 0x100
+                self.z = self.calc_z(self.X)
+                self.n = self.calc_n(self.X)
             case i.INY:
-                if self.addressing_mode == m.IMPL:
-                    self.Y = (self.Y + 1) % 0x100
-                    self.z = self.calc_z(self.Y)
-                    self.n = self.calc_n(self.Y)
+                self.Y = (self.Y + 1) % 0x100
+                self.z = self.calc_z(self.Y)
+                self.n = self.calc_n(self.Y)
             case i.DEX:
-                if self.addressing_mode == m.IMPL:
-                    self.X = (self.X - 1) % 0x100
-                    self.z = self.calc_z(self.X)
-                    self.n = self.calc_n(self.X)
+                self.X = (self.X - 1) % 0x100
+                self.z = self.calc_z(self.X)
+                self.n = self.calc_n(self.X)
             case i.DEY:
-                if self.addressing_mode == m.IMPL:
-                    self.Y = (self.Y - 1) % 0x100
-                    self.z = self.calc_z(self.Y)
-                    self.n = self.calc_n(self.Y)
+                self.Y = (self.Y - 1) % 0x100
+                self.z = self.calc_z(self.Y)
+                self.n = self.calc_n(self.Y)
             case i.DEC:
                 if self.addressing_mode == m.ZPG:
                     self.fetch()
@@ -363,41 +348,35 @@ class CPU:
                     hh = self.data
                     self.PC = toUint16(hh, ll)
             case i.BEQ:
-                if self.addressing_mode == m.REL:
-                    self.fetch()
-                    offset = self.data
-                    if self.z == 1:
-                        self.PC = (self.PC + offset) & 0xFFFF
+                self.fetch()
+                offset = self.data
+                if self.z == 1:
+                    self.PC = (self.PC + offset) & 0xFFFF
             case i.BNE:
-                if self.addressing_mode == m.REL:
-                    self.fetch()
-                    offset = self.data
-                    if self.z == 0:
-                        self.PC = (self.PC + offset) & 0xFFFF
+                self.fetch()
+                offset = self.data
+                if self.z == 0:
+                    self.PC = (self.PC + offset) & 0xFFFF
             case i.BMI:
-                if self.addressing_mode == m.REL:
-                    self.fetch()
-                    offset = self.data
-                    if self.n == 1:
-                        self.PC = (self.PC + offset) & 0xFFFF
+                self.fetch()
+                offset = self.data
+                if self.n == 1:
+                    self.PC = (self.PC + offset) & 0xFFFF
             case i.BPL:
-                if self.addressing_mode == m.REL:
-                    self.fetch()
-                    offset = self.data
-                    if self.n == 0:
-                        self.PC = (self.PC + offset) & 0xFFFF
+                self.fetch()
+                offset = self.data
+                if self.n == 0:
+                    self.PC = (self.PC + offset) & 0xFFFF
             case i.BCS:
-                if self.addressing_mode == m.REL:
-                    self.fetch()
-                    offset = self.data
-                    if self.c == 1:
-                        self.PC = (self.PC + offset) & 0xFFFF
+                self.fetch()
+                offset = self.data
+                if self.c == 1:
+                    self.PC = (self.PC + offset) & 0xFFFF
             case i.BCC:
-                if self.addressing_mode == m.REL:
-                    self.fetch()
-                    offset = self.data
-                    if self.c == 0:
-                        self.PC = (self.PC + offset) & 0xFFFF
+                self.fetch()
+                offset = self.data
+                if self.c == 0:
+                    self.PC = (self.PC + offset) & 0xFFFF
             case i.AND:
                 if self.addressing_mode == m.IMM:
                     self.fetch()
