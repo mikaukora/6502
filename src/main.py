@@ -220,19 +220,19 @@ class CPU:
             case i.SEI:
                 self.i = 1
             case i.INX:
-                self.X = (self.X + 1) % 0x100
+                self.X = uint8(self.X + 1)
                 self.z = self.calc_z(self.X)
                 self.n = self.calc_n(self.X)
             case i.INY:
-                self.Y = (self.Y + 1) % 0x100
+                self.Y = uint8(self.Y + 1)
                 self.z = self.calc_z(self.Y)
                 self.n = self.calc_n(self.Y)
             case i.DEX:
-                self.X = (self.X - 1) % 0x100
+                self.X = uint8(self.X - 1)
                 self.z = self.calc_z(self.X)
                 self.n = self.calc_n(self.X)
             case i.DEY:
-                self.Y = (self.Y - 1) % 0x100
+                self.Y = uint8(self.Y - 1)
                 self.z = self.calc_z(self.Y)
                 self.n = self.calc_n(self.Y)
             case i.DEC:
@@ -273,32 +273,32 @@ class CPU:
                 self.fetch()
                 offset = self.data
                 if self.z == 1:
-                    self.PC = (self.PC + offset) & 0xFFFF
+                    self.PC = uint16(self.PC + offset)
             case i.BNE:
                 self.fetch()
                 offset = self.data
                 if self.z == 0:
-                    self.PC = (self.PC + offset) & 0xFFFF
+                    self.PC = uint16(self.PC + offset)
             case i.BMI:
                 self.fetch()
                 offset = self.data
                 if self.n == 1:
-                    self.PC = (self.PC + offset) & 0xFFFF
+                    self.PC = uint16(self.PC + offset)
             case i.BPL:
                 self.fetch()
                 offset = self.data
                 if self.n == 0:
-                    self.PC = (self.PC + offset) & 0xFFFF
+                    self.PC = uint16(self.PC + offset)
             case i.BCS:
                 self.fetch()
                 offset = self.data
                 if self.c == 1:
-                    self.PC = (self.PC + offset) & 0xFFFF
+                    self.PC = uint16(self.PC + offset)
             case i.BCC:
                 self.fetch()
                 offset = self.data
                 if self.c == 0:
-                    self.PC = (self.PC + offset) & 0xFFFF
+                    self.PC = uint16(self.PC + offset)
             case i.AND:
                 self.A = self.A & self.get_data()
                 self.z = self.calc_z(self.A)
