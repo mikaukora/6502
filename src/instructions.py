@@ -86,8 +86,8 @@ standard: List[List[Optional[Tuple[Instruction, AddressingMode]]]] = [
         #0     1     2     3     4     5     6     7     8     9     A     B     C     D     E     F
         [None, (i.ORA, m.IND_X), None, None, None, (i.ORA, m.ZPG), None, None, None, (i.ORA, m.IMM), None, None, None, (i.ORA, m.ABS), None, None], # 0
         [(i.BPL, m.REL), (i.ORA, m.IND_Y), None, None, None, (i.ORA, m.ZPG_X), None, None, (i.CLC, m.IMPL), (i.ORA,m.ABS_Y), None, None, None, (i.ORA,m.ABS_X), None, None], # 1
-        [None, None, None, None, None, None, None, None, None, (i.AND, m.IMM), None, None, None, None, None, None], # 2
-        [(i.BMI, m.REL), None, None, None, None, None, None, None, (i.SEC, m.IMPL), None, None, None, None, None, None, None], # 3
+        [None, (i.AND, m.IND_X), None, None, None, (i.AND, m.ZPG), None, None, None, (i.AND, m.IMM), None, None, None, (i.AND, m.ABS), None, None], # 2
+        [(i.BMI, m.REL), (i.AND, m.IND_Y), None, None, None, (i.AND, m.ZPG_X), None, None, (i.SEC, m.IMPL), (i.AND, m.ABS_Y), None, None, None, (i.AND, m.ABS_X), None, None], # 3
         [None, (i.EOR, m.IND_X), None, None, (i.EOR, m.ZPG), None, None, None, None, (i.EOR, m.IMM), None, None, (i.JMP, m.ABS), (i.EOR, m.ABS), None, None], # 4
         [None, (i.EOR, m.IND_Y), None, None, None, (i.EOR, m.ZPG_X), None, None, (i.CLI, m.IMPL), (i.EOR, m.ABS_Y), None, None, None, (i.EOR, m.ABS_X), None, None], # 5
         [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], # 6

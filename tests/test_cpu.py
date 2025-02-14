@@ -1246,14 +1246,96 @@ def test_BCC():
 
 
 def test_AND():
-    bus = Bus(Memory([0xA9, 0xF0, 0x29, 0xAA]))
-    cpu = CPU(bus)
+    program = [
+        0xA9, 0xF0,       # LDA #$F0  ; Load A with $F0
+        0x29, 0xAA,       # AND #$AA  ; A = $F0 AND $AA -> $A0
+        0x8D, 0x00, 0x02, # STA $0200 ; Store result in safe memory area
 
-    cpu.step()
+        0xA9, 0x55,       # LDA #$55  ; Load A with $55
+        0x2D, 0x00, 0x02, # AND $0200 ; A = $55 AND value at $0200 ($A0)
+
+        0xA9, 0x0F,       # LDA #$0F  ; Load A with $0F
+        0x3D, 0x10, 0x02, # AND $0210,X ; AND with absolute,X (assume X=0)
+
+        0xA9, 0x33,       # LDA #$33  ; Load A with $33
+        0x2D, 0x20, 0x02, # AND $0220 ; AND with absolute memory address
+
+        0xA9, 0xF0,       # LDA #$F0  ; Load A with $F0
+        0x39, 0x40, 0x02, # AND $0240,Y ; Absolute,Y addressing
+
+        0xA2, 0x00,       # LDX #$00  ; Load X with 0
+        0xA9, 0x22,       # LDA #$22  ; Load A with $22
+        0x21, 0x50,       # AND ($50,X) ; Indirect,X addressing
+
+        0xA9, 0x11,       # LDA #$11  ; Load A with $11
+        0x31, 0x60        # AND ($60),Y ; Indirect,Y addressing
+    ]
+
+    mem = Memory([0xEA] * 0x600 + program + [0xEA] * (0x1000 - len(program)))
+
+    bus = Bus(mem)
+    cpu = CPU(bus)
+    cpu.PC = 0x0600
+
+    mem.write(0x0200, 0xA0)  # Used in absolute addressing
+    mem.write(0x0210, 0x0C)  # Used in absolute,X addressing
+    mem.write(0x0220, 0xCC)  # Used in absolute addressing
+    mem.write(0x0240, 0x0F)  # Used in absolute,Y addressing
+    mem.write(0x0050, 0x80)  # Pointer for (indirect,X)
+    mem.write(0x0051, 0x02)
+    mem.write(0x0280, 0x77)  # Value for (indirect,X)
+    mem.write(0x0060, 0x90)  # Pointer for (indirect),Y
+    mem.write(0x0061, 0x02)
+    mem.write(0x0290, 0x99)  # Value for (indirect),Y
+
+    # Execute and verify results
+    cpu.step()  # LDA #$F0
     assert cpu.A == 0xF0
 
-    cpu.step()
-    assert cpu.A == 0xA0
+    cpu.step()  # AND #$AA
+    assert cpu.A == (0xF0 & 0xAA)
+
+    cpu.step()  # STA $0200
+    assert mem.read(0x0200) == 0xA0
+
+    cpu.step()  # LDA #$55
+    assert cpu.A == 0x55
+
+    cpu.step()  # AND $0200
+    assert cpu.A == (0x55 & 0xA0)
+
+    cpu.step()  # LDA #$0F
+    assert cpu.A == 0x0F
+
+    cpu.step()  # AND $0210,X
+    assert cpu.A == (0x0F & 0x0C)
+
+    cpu.step()  # LDA #$33
+    assert cpu.A == 0x33
+
+    cpu.step()  # AND $0220
+    assert cpu.A == (0x33 & 0xCC)
+
+    cpu.step()  # LDA #$F0
+    assert cpu.A == 0xF0
+
+    cpu.step()  # AND $0240,Y
+    assert cpu.A == (0xF0 & 0x0F)
+
+    cpu.step()  # LDX #$00
+    assert cpu.X == 0x00
+
+    cpu.step()  # LDA #$22
+    assert cpu.A == 0x22
+
+    cpu.step()  # AND ($50,X)
+    assert cpu.A == (0x22 & 0x77)
+
+    cpu.step()  # LDA #$11
+    assert cpu.A == 0x11
+
+    cpu.step()  # AND ($60),Y
+    assert cpu.A == (0x11 & 0x99)
 
 
 def test_ORA():
@@ -1292,10 +1374,10 @@ def test_ORA():
     mem.write(0x0210, 0x0C)  # Used in absolute,X addressing
     mem.write(0x0220, 0xCC)  # Used in absolute addressing
     mem.write(0x0240, 0x0F)  # Used in absolute,Y addressing
-    mem.write(0x0050, 0x80)   # Pointer for (indirect,X)
+    mem.write(0x0050, 0x80)  # Pointer for (indirect,X)
     mem.write(0x0051, 0x02)
     mem.write(0x0280, 0x77)  # Value for (indirect,X)
-    mem.write(0x0060, 0x90)   # Pointer for (indirect),Y
+    mem.write(0x0060, 0x90)  # Pointer for (indirect),Y
     mem.write(0x0061, 0x02)
     mem.write(0x0290, 0x99)  # Value for (indirect),Y
 
@@ -1384,10 +1466,10 @@ def test_EOR():
     mem.write(0x0210, 0x0C)  # Used in absolute,X addressing
     mem.write(0x0220, 0xCC)  # Used in absolute addressing
     mem.write(0x0240, 0x0F)  # Used in absolute,Y addressing
-    mem.write(0x0050, 0x80)   # Pointer for (indirect,X)
+    mem.write(0x0050, 0x80)  # Pointer for (indirect,X)
     mem.write(0x0051, 0x02)
     mem.write(0x0280, 0x77)  # Value for (indirect,X)
-    mem.write(0x0060, 0x90)   # Pointer for (indirect),Y
+    mem.write(0x0060, 0x90)  # Pointer for (indirect),Y
     mem.write(0x0061, 0x02)
     mem.write(0x0290, 0x99)  # Value for (indirect),Y
 
