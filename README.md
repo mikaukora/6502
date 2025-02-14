@@ -90,6 +90,8 @@ options:
 - **Absolute, X** (`$LLHH,X`)
 - **Absolute, Y** (`$LLHH,Y`)
 - **Implied**
+- **X-indexed, indirect**
+- **indirect, Y-indexed**
 
 ## Running
 

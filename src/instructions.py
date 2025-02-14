@@ -84,8 +84,8 @@ m = AddressingMode
 # fmt: off
 standard: List[List[Optional[Tuple[Instruction, AddressingMode]]]] = [
         #0     1     2     3     4     5     6     7     8     9     A     B     C     D     E     F
-        [None, None, None, None, None, None, None, None, None, (i.ORA, m.IMM), None, None, None, None, None, None], # 0
-        [(i.BPL, m.REL), None, None, None, None, None, None, None, (i.CLC, m.IMPL), None, None, None, None, None, None, None], # 1
+        [None, (i.ORA, m.IND_X), None, None, None, (i.ORA, m.ZPG), None, None, None, (i.ORA, m.IMM), None, None, None, (i.ORA, m.ABS), None, None], # 0
+        [(i.BPL, m.REL), (i.ORA, m.IND_Y), None, None, None, (i.ORA, m.ZPG_X), None, None, (i.CLC, m.IMPL), (i.ORA,m.ABS_Y), None, None, None, (i.ORA,m.ABS_X), None, None], # 1
         [None, None, None, None, None, None, None, None, None, (i.AND, m.IMM), None, None, None, None, None, None], # 2
         [(i.BMI, m.REL), None, None, None, None, None, None, None, (i.SEC, m.IMPL), None, None, None, None, None, None, None], # 3
         [None, None, None, None, None, None, None, None, None, (i.EOR, m.IMM), None, None, (i.JMP, m.ABS), None, None, None], # 4

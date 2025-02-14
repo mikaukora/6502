@@ -143,6 +143,14 @@ class CPU:
             self.fetch()
             hh = self.data
             return self.read(toUint16(hh, ll) + self.Y)
+        elif self.addressing_mode == m.IND_X:
+            ll = self.read(uint8(self.data + self.X))
+            hh = self.read(uint8(self.data + self.X + 1))
+            return self.read(toUint16(hh, ll))
+        elif self.addressing_mode == m.IND_Y:
+            ll = self.read(self.data)
+            hh = self.read(uint8(self.data + 1))
+            return self.read(toUint16(hh, ll) + self.Y)
 
     """
         Fetches the address based on the addressing mode.
