@@ -1113,20 +1113,32 @@ def test_LDY_ABS_X():
     assert cpu.Y == 0xDD
 
 
-def test_JMP_ABS():
-    bus = Bus(
-        Memory([0x4c, 0x05, 0x00, 0xa9, 0x66, 0x4c, 0x09, 0x00, 0x00, 0xa9, 0x55, 0x4c, 0x03, 0x00])
-    )
+def test_JMP():
+    mem = Memory([
+        0x4C, 0x05, 0x00,  # JMP $0005
+        0xA9, 0x55,        # LDA #$55   (Skipped)
+        0xA9, 0x66,        # LDA #$66
+        0x6C, 0x0a, 0x00,  # JMP ($000a) (Indirect jump)
+        0x0e, 0x00,        # Jump target: $000e
+        0xEA, 0xEA,        # NOP, NOP (Padding)
+        0xA9, 0x77,        # LDA #$77   (This is at $0014, should be executed)
+    ])
+
+    bus = Bus(mem)
     cpu = CPU(bus)
 
-    cpu.step()
-    cpu.step()
-    cpu.step()
-    assert cpu.A == 0x55
+    cpu.step()  # JMP $0005
+    assert cpu.PC == 0x0005  # Should land on LDA #$66
 
-    cpu.step()
-    cpu.step()
+    cpu.step()  # LDA #$66
     assert cpu.A == 0x66
+
+    cpu.step()  # JMP ($0010) - indirect
+    assert cpu.PC == 0x000e
+
+    cpu.step()  # LDA #$77
+    assert cpu.A == 0x77
+
 
 
 def test_BEQ():

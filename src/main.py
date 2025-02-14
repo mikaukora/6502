@@ -168,6 +168,12 @@ class CPU:
             return uint8(self.data + self.X)
         elif self.addressing_mode == m.ZPG_Y:
             return uint8(self.data + self.Y)
+        elif self.addressing_mode == m.IND:
+            ll = self.data
+            self.fetch()
+            hh = self.data
+            return self.read(toUint16(hh, ll))
+
 
     def execute(self):
         match self.instruction:
