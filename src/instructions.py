@@ -96,8 +96,8 @@ standard: List[List[Optional[Tuple[Instruction, AddressingMode]]]] = [
         [(i.BCC, m.REL), None, None, None, (i.STY, m.ZPG_X), (i.STA, m.ZPG_X), (i.STX, m.ZPG_Y), None, (i.TYA, m.IMPL), None, (i.TXS, m.IMPL), None, None, None, None, None ], # 9
         [(i.LDY, m.IMM), None, (i.LDX, m.IMM), None, (i.LDY, m.ZPG), (i.LDA, m.ZPG), (i.LDX, m.ZPG), None, (i.TAY, m.IMPL), (i.LDA, m.IMM), (i.TAX, m.IMPL), None, (i.LDY, m.ABS), (i.LDA, m.ABS), (i.LDX, m.ABS), None], # A
         [(i.BCS, m.REL), None, None, None, (i.LDY, m.ZPG_X), (i.LDA, m.ZPG_X), (i.LDX, m.ZPG_Y), None, (i.CLV, m.IMPL), (i.LDA, m.ABS_Y), (i.TSX, m.IMPL), None, (i.LDY, m.ABS_X), (i.LDA, m.ABS_X), (i.LDX, m.ABS_Y), None], # B
-        [(i.CPY, m.IMM), None, None, None, (i.CPY, m.ZPG), None, (i.DEC, m.ZPG), None, (i.INY, m.IMPL), (i.CMP, m.IMM), (i.DEX, m.IMPL), None, (i.CPY, m.ABS), None, (i.DEC, m.ABS), None], # C
-        [(i.BNE, m.REL), None, None, None, None, None, (i.DEC, m.ZPG_X), None, (i.CLD, m.IMPL), None, None, None, None, None, None, None], # D
+        [(i.CPY, m.IMM), (i.CMP, m.IND_X), None, None, (i.CPY, m.ZPG), (i.CMP, m.ZPG), (i.DEC, m.ZPG), None, (i.INY, m.IMPL), (i.CMP, m.IMM), (i.DEX, m.IMPL), None, (i.CPY, m.ABS), (i.CMP, m.ABS), (i.DEC, m.ABS), None], # C
+        [(i.BNE, m.REL), (i.CMP, m.IND_Y), None, None, None, (i.CMP, m.ZPG_X), (i.DEC, m.ZPG_X), None, (i.CLD, m.IMPL), (i.CMP, m.ABS_Y), None, None, None, (i.CMP, m.ABS_X), None, None], # D
         [(i.CPX, m.IMM), None, None, None, (i.CPX, m.ZPG), None, (i.INC, m.ZPG), None, (i.INX, m.IMPL), None, (i.NOP, m.IMPL), None, (i.CPX, m.ABS), None, (i.INC, m.ABS), None], # E
         [(i.BEQ, m.REL), None, None, None, None, None, (i.INC, m.ZPG_X), None, (i.SED, m.IMPL), None, None, None, None, None, None, None], # F
     ]

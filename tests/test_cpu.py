@@ -1520,3 +1520,102 @@ def test_EOR():
 
     cpu.step()  # EOR ($60),Y
     assert cpu.A == (0x11 ^ 0x99)
+
+
+def test_CMP():
+    program = [
+        0xA9, 0x50,       # LDA #$50  ; Load A with $50
+        0xC9, 0x50,       # CMP #$50  ; Compare A with immediate value
+
+        0xA9, 0x30,       # LDA #$30  ; Load A with $30
+        0xC5, 0x10,       # CMP $10   ; Compare A with value in zero page
+
+        0xA9, 0x80,       # LDA #$80  ; Load A with $80
+        0xD5, 0x20,       # CMP $20,X ; Compare with zero page, X (assume X=0)
+
+        0xA9, 0xF0,       # LDA #$F0  ; Load A with $F0
+        0xCD, 0x00, 0x02, # CMP $0200 ; Compare with absolute address
+
+        0xA9, 0x70,       # LDA #$70  ; Load A with $70
+        0xDD, 0x10, 0x02, # CMP $0210,X ; Compare with absolute, X (assume X=0)
+
+        0xA9, 0x20,       # LDA #$20  ; Load A with $20
+        0xD9, 0x20, 0x02, # CMP $0220,Y ; Compare with absolute, Y (assume Y=0)
+
+        0xA2, 0x00,       # LDX #$00  ; Load X with 0
+        0xA9, 0x60,       # LDA #$60  ; Load A with $60
+        0xC1, 0x30,       # CMP ($30,X) ; Indirect, X
+
+        0xA9, 0x90,       # LDA #$90  ; Load A with $90
+        0xD1, 0x40        # CMP ($40),Y ; Indirect, Y
+    ]
+
+    mem = Memory([0xEA] * 0x600 + program + [0xEA] * (0x1000 - len(program)))
+
+    bus = Bus(mem)
+    cpu = CPU(bus)
+    cpu.PC = 0x0600
+
+    mem.write(0x0010, 0x30)  # Zero page value
+    mem.write(0x0020, 0x80)  # Zero page,X value
+    mem.write(0x0200, 0xF0)  # Absolute addressing value
+    mem.write(0x0210, 0x70)  # Absolute,X value
+    mem.write(0x0220, 0x20)  # Absolute,Y value
+    mem.write(0x0030, 0x90)  # Pointer for (indirect,X)
+    mem.write(0x0031, 0x02)
+    mem.write(0x0290, 0x60)  # Value for (indirect,X)
+    mem.write(0x0040, 0xA0)  # Pointer for (indirect),Y
+    mem.write(0x0041, 0x02)
+    mem.write(0x02A0, 0x90)  # Value for (indirect),Y
+
+    # Execute and verify results
+    cpu.step()  # LDA #$50
+    assert cpu.A == 0x50
+
+    cpu.step()  # CMP #$50
+    assert cpu.z == 1 and cpu.c == 1
+
+    cpu.step()  # LDA #$30
+    assert cpu.A == 0x30
+
+    cpu.step()  # CMP $10
+    assert cpu.z == 1 and cpu.c == 1
+
+    cpu.step()  # LDA #$80
+    assert cpu.A == 0x80
+
+    cpu.step()  # CMP $20,X
+    assert cpu.z == 1 and cpu.c == 1
+
+    cpu.step()  # LDA #$F0
+    assert cpu.A == 0xF0
+
+    cpu.step()  # CMP $0200
+    assert cpu.z == 1 and cpu.c == 1
+
+    cpu.step()  # LDA #$70
+    assert cpu.A == 0x70
+
+    cpu.step()  # CMP $0210,X
+    assert cpu.z == 1 and cpu.c == 1
+
+    cpu.step()  # LDA #$20
+    assert cpu.A == 0x20
+
+    cpu.step()  # CMP $0220,Y
+    assert cpu.z == 1 and cpu.c == 1
+
+    cpu.step()  # LDX #$00
+    assert cpu.X == 0x00
+
+    cpu.step()  # LDA #$60
+    assert cpu.A == 0x60
+
+    cpu.step()  # CMP ($30,X)
+    assert cpu.z == 1 and cpu.c == 1
+
+    cpu.step()  # LDA #$90
+    assert cpu.A == 0x90
+
+    cpu.step()  # CMP ($40),Y
+    assert cpu.z == 1 and cpu.c == 1
