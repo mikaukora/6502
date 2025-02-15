@@ -67,7 +67,7 @@ class CPU:
         self._z = 0b0  # zero
         self._c = 0b0  # carry
         self._PC = 0x0000  # program counter - 16-bit
-        self._S = 0x00  # stack pointer
+        self._S = 0xFF  # stack pointer
         self._X = 0x00  # index register X
         self._Y = 0x00  # index register Y
         self.bus = bus
@@ -177,6 +177,13 @@ class CPU:
             target_hh = self.read(toUint16(hh, uint8(ll + 1)))
             return toUint16(target_hh, target_ll)
 
+    def stack_push(self, value):
+        self.write(0x0100 + self.S, value)
+        self.S = uint8(self.S - 1)
+
+    def stack_pop(self):
+        self.S = uint8(self.S + 1)
+        return self.read(0x0100 + self.S)
 
     def execute(self):
         match self.instruction:
@@ -326,6 +333,12 @@ class CPU:
                 self.n = self.calc_n(self.A)
             case i.EOR:
                 self.A = self.A ^ self.get_data()
+                self.z = self.calc_z(self.A)
+                self.n = self.calc_n(self.A)
+            case i.PHA:
+                self.stack_push(self.A)
+            case i.PLA:
+                self.A = self.stack_pop()
                 self.z = self.calc_z(self.A)
                 self.n = self.calc_n(self.A)
 

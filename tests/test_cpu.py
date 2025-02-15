@@ -1665,3 +1665,27 @@ def test_JMP_page_border_bug():
     assert cpu.PC == 0x0078
     assert cpu.A == 0x66
 
+
+def test_PHA_PLA():
+    program = [
+        0xA9, 0x55,  # LDA #$55
+        0x48,        # PHA        ; Push A onto stack
+        0xA9, 0xAA,  # LDA #$AA
+        0x68         # PLA        ; Pull A from stack (should restore $55)
+    ]
+
+    mem = Memory([0xEA] * 0x600 + program + [0xEA] * (0x1000 - len(program)))
+    bus = Bus(mem)
+    cpu = CPU(bus)
+    cpu.PC = 0x0600
+
+    cpu.step()  # LDA #$55
+    assert cpu.A == 0x55
+
+    cpu.step()  # PHA (Push A to stack)
+
+    cpu.step()  # LDA #$AA
+    assert cpu.A == 0xAA
+
+    cpu.step()  # PLA (Pull A from stack)
+    assert cpu.A == 0x55  # Should restore original value
