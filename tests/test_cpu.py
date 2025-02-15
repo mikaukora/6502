@@ -1631,3 +1631,37 @@ def test_CMP():
 
     cpu.step()  # CMP ($40),Y
     assert cpu.z == 1 and cpu.c == 1
+
+
+def test_JMP_page_border_bug():
+    program = [
+        0x6C, 0xFF, 0x00  # JMP $00FF (Absolute)
+    ]
+
+    jumped_program = [
+        0xA9, 0x66,  # LDA #$66
+    ]
+
+    mem = Memory(
+        [0xEA] * 0x0050 +
+        program +
+        [0xEA] * (0x0076 - (len(program) + 0x0050)) +
+        jumped_program +
+        [0xEA] * 0x0100
+    )
+
+    mem.data[0x00FF] = 0x76
+    mem.data[0x0000] = 0x00
+    mem.data[0x0100] = 0x10
+
+    bus = Bus(mem)
+    cpu = CPU(bus)
+    cpu.PC = 0x0050  # Start execution
+
+    cpu.step() # JMP ($00FF)
+    assert cpu.PC == 0x0076
+
+    cpu.step()
+    assert cpu.PC == 0x0078
+    assert cpu.A == 0x66
+

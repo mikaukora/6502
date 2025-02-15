@@ -172,7 +172,10 @@ class CPU:
             ll = self.data
             self.fetch()
             hh = self.data
-            return self.read(toUint16(hh, ll))
+            target_ll = self.read(toUint16(hh, ll))
+            # introduce a bug, hh is not incremented by the CPU
+            target_hh = self.read(toUint16(hh, uint8(ll + 1)))
+            return toUint16(target_hh, target_ll)
 
 
     def execute(self):
