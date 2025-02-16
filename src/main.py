@@ -61,7 +61,6 @@ class CPU:
         self._P = 0x00  # status register, 7-bit
         self._n = 0b0  # negative
         self._v = 0b0  # overflow
-        self._b = 0b0  # break
         self._d = 0b0  # decimal
         self._i = 0b0  # interrupt disable
         self._z = 0b0  # zero
@@ -427,14 +426,6 @@ class CPU:
     @v.setter
     def v(self, value):
         self._P = self._P & ~(1 << 6) | bit(value) << 6
-
-    @property
-    def b(self):
-        return (self._P >> 4) & 0x01
-
-    @b.setter
-    def b(self, value):
-        self._P = self._P & ~(1 << 4) | bit(value) << 4
 
     @property
     def d(self):

@@ -13,7 +13,6 @@ def test_registers():
     cpu.P = 0x00
     assert cpu.n == 0
     assert cpu.v == 0
-    assert cpu.b == 0
     assert cpu.d == 0
     assert cpu.i == 0
     assert cpu.z == 0
@@ -22,7 +21,6 @@ def test_registers():
     cpu.P = 0xFF
     assert cpu.n == 1
     assert cpu.v == 1
-    assert cpu.b == 1
     assert cpu.d == 1
     assert cpu.i == 1
     assert cpu.z == 1
@@ -33,32 +31,28 @@ def test_registers():
     assert cpu.P == 0x80
     cpu.v = 1
     assert cpu.P == 0xC0
-    cpu.b = 1
-    assert cpu.P == 0xD0
     cpu.d = 1
-    assert cpu.P == 0xD8
+    assert cpu.P == 0xC8
     cpu.i = 1
-    assert cpu.P == 0xDC
+    assert cpu.P == 0xCC
     cpu.z = 1
-    assert cpu.P == 0xDE
+    assert cpu.P == 0xCE
     cpu.c = 1
-    assert cpu.P == 0xDF
+    assert cpu.P == 0xCF
 
     cpu.P = 0xFF
     cpu.n = 0
     assert cpu.P == 0x7F
     cpu.v = 0
     assert cpu.P == 0x3F
-    cpu.b = 0
-    assert cpu.P == 0x2F  # unused bit (5) is set
     cpu.d = 0
-    assert cpu.P == 0x27
+    assert cpu.P == 0x37
     cpu.i = 0
-    assert cpu.P == 0x23
+    assert cpu.P == 0x33
     cpu.z = 0
-    assert cpu.P == 0x21
+    assert cpu.P == 0x31
     cpu.c = 0
-    assert cpu.P == 0x20
+    assert cpu.P == 0x30
 
 
 def test_fetch():
