@@ -1683,3 +1683,69 @@ def test_PHA_PLA():
 
     cpu.step()  # PLA (Pull A from stack)
     assert cpu.A == 0x55  # Should restore original value
+
+
+def test_JSR_RTS():
+    program = [
+        0x20, 0x05, 0x06,  # JSR $0605  (Jump to subroutine)
+        0xA9, 0x11,        # LDA #$11   (Executed after subroutine returns)
+
+        0xA9, 0x22,        # LDA #$22   (Subroutine: Load A with $22)
+        0x60               # RTS        (Return to caller)
+    ]
+
+    mem = Memory([0xEA] * 0x600 + program + [0xEA] * (0x1000 - len(program)))
+    bus = Bus(mem)
+    cpu = CPU(bus)
+    cpu.PC = 0x0600
+
+    cpu.step()  # JSR $0605
+    assert cpu.PC == 0x0605  # Should jump to subroutine
+
+    cpu.step()  # LDA #$22 (inside subroutine)
+    assert cpu.A == 0x22
+
+    cpu.step()  # RTS
+    assert cpu.PC == 0x0603  # Should return to next instruction after JSR
+
+    cpu.step()  # LDA #$11
+    assert cpu.A == 0x11  # Should execute after returning from subroutine
+
+
+def test_JSR_RTS_nested():
+    program = [
+        0x20, 0x05, 0x06,  # JSR $0605  (Jump to first subroutine)
+        0xA9, 0x33,        # LDA #$33   (Executed after all subroutines return)
+
+        # Subroutine 1
+        0x20, 0x0B, 0x06,  # JSR $060B  (Call second subroutine)
+        0xA9, 0x11,        # LDA #$11   (After returning from second subroutine)
+        0x60,              # RTS        (Return to main program)
+
+        # Subroutine 2
+        0xA9, 0x22,        # LDA #$22   (Executed inside second subroutine)
+        0x60               # RTS        (Return to first subroutine)
+    ]
+
+    mem = Memory([0xEA] * 0x600 + program + [0xEA] * (0x1000 - len(program)))
+    bus = Bus(mem)
+    cpu = CPU(bus)
+    cpu.PC = 0x0600
+
+    cpu.step()  # JSR $0605 (First subroutine)
+    assert cpu.PC == 0x0605  # Jumped to first subroutine
+
+    cpu.step()  # JSR $060B (Second subroutine)
+    assert cpu.PC == 0x060B  # Jumped to second subroutine
+
+    cpu.step()  # LDA #$22 (Inside second subroutine)
+    assert cpu.A == 0x22
+
+    cpu.step()  # RTS (Return from second subroutine)
+    assert cpu.PC == 0x0608  # Should return to instruction after JSR in first subroutine
+
+    cpu.step()  # LDA #$11 (Inside first subroutine)
+    assert cpu.A == 0x11
+
+    cpu.step()  # RTS (Return from first subroutine)
+    assert cpu.PC == 0x0603  # Should return to main program after JSR

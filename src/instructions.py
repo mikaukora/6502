@@ -86,11 +86,11 @@ standard: List[List[Optional[Tuple[Instruction, AddressingMode]]]] = [
         #0     1     2     3     4     5     6     7     8     9     A     B     C     D     E     F
         [None, (i.ORA, m.IND_X), None, None, None, (i.ORA, m.ZPG), None, None, None, (i.ORA, m.IMM), None, None, None, (i.ORA, m.ABS), None, None], # 0
         [(i.BPL, m.REL), (i.ORA, m.IND_Y), None, None, None, (i.ORA, m.ZPG_X), None, None, (i.CLC, m.IMPL), (i.ORA,m.ABS_Y), None, None, None, (i.ORA,m.ABS_X), None, None], # 1
-        [None, (i.AND, m.IND_X), None, None, None, (i.AND, m.ZPG), None, None, None, (i.AND, m.IMM), None, None, None, (i.AND, m.ABS), None, None], # 2
+        [(i.JSR, m.ABS), (i.AND, m.IND_X), None, None, None, (i.AND, m.ZPG), None, None, None, (i.AND, m.IMM), None, None, None, (i.AND, m.ABS), None, None], # 2
         [(i.BMI, m.REL), (i.AND, m.IND_Y), None, None, None, (i.AND, m.ZPG_X), None, None, (i.SEC, m.IMPL), (i.AND, m.ABS_Y), None, None, None, (i.AND, m.ABS_X), None, None], # 3
         [None, (i.EOR, m.IND_X), None, None, (i.EOR, m.ZPG), None, None, None, (i.PHA, m.IMPL), (i.EOR, m.IMM), None, None, (i.JMP, m.ABS), (i.EOR, m.ABS), None, None], # 4
         [None, (i.EOR, m.IND_Y), None, None, None, (i.EOR, m.ZPG_X), None, None, (i.CLI, m.IMPL), (i.EOR, m.ABS_Y), None, None, None, (i.EOR, m.ABS_X), None, None], # 5
-        [None, None, None, None, None, None, None, None, (i.PLA, m.IMPL), None, None, None, (i.JMP, m.IND), None, None, None], # 6
+        [(i.RTS, m.ABS), None, None, None, None, None, None, None, (i.PLA, m.IMPL), None, None, None, (i.JMP, m.IND), None, None, None], # 6
         [None, None, None, None, None, None, None, None, (i.SEI, m.IMPL), None, None, None, None, None, None, None], # 7
         [None, None, None, None, (i.STY, m.ZPG), (i.STA, m.ZPG), (i.STX, m.ZPG), None, (i.DEY, m.IMPL), None, (i.TXA, m.IMPL), None, (i.STY, m.ABS), (i.STA, m.ABS), (i.STX, m.ABS), None], # 8
         [(i.BCC, m.REL), None, None, None, (i.STY, m.ZPG_X), (i.STA, m.ZPG_X), (i.STX, m.ZPG_Y), None, (i.TYA, m.IMPL), None, (i.TXS, m.IMPL), None, None, None, None, None ], # 9

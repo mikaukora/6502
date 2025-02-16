@@ -61,6 +61,8 @@ The emulator currently supports the following 6502 instructions:
   - `BCS` - Branch on Carry Set
 - **Jumps & Subroutines**
   - `JMP` - Jump
+  - `JSR` - Jump to Subroutine
+  - `RTS` - Return from Subroutine
 - **Other**
   - `NOP` - No Operation
 

@@ -340,6 +340,17 @@ class CPU:
                 self.A = self.stack_pop()
                 self.z = self.calc_z(self.A)
                 self.n = self.calc_n(self.A)
+            case i.JSR:
+                addr = uint16(self.PC + 2)
+                self.stack_push(uint8(addr >> 8))
+                self.stack_push(uint8(addr))
+                self.PC = self.get_addr()
+            case i.RTS:
+                ll = self.stack_pop()
+                hh = self.stack_pop()
+                self.PC = toUint16(hh, ll)
+            case _:  # default
+                raise NotImplementedError(f"Instruction {self.instruction} not implemented")
 
     """
         Starts from the address in PC.
