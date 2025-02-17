@@ -33,8 +33,11 @@ class Memory:
         self.data[address] = value
         print(f"W {address:#06x}: {self.data[address]:x}")
 
-    def dump(self):
-        for index in range(0, len(self.data), 16):
+    def dump(self, start=0, end=None):
+        if end is None:
+            end = len(self.data)
+
+        for index in range(start, end, 16):
             print(
                 f"{index:04x}\t{' '.join(f'{x:02x}' for x in self.data[index : index + 16])}"
             )
