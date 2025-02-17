@@ -175,13 +175,13 @@ def test_STA_ZPG():
     assert cpu.A == 0xEA
 
     cpu.step()
-    assert memory.data[0x08] == 0xEA
+    assert memory[0x08] == 0xEA
 
     cpu.step()
-    assert memory.data[0x09] == 0xEA
+    assert memory[0x09] == 0xEA
 
     cpu.step()
-    assert memory.data[0x0A] == 0xEA
+    assert memory[0x0A] == 0xEA
 
 
 def test_STY_ZPG():
@@ -193,13 +193,13 @@ def test_STY_ZPG():
     assert cpu.Y == 0xEA
 
     cpu.step()
-    assert memory.data[0x08] == 0xEA
+    assert memory[0x08] == 0xEA
 
     cpu.step()
-    assert memory.data[0x09] == 0xEA
+    assert memory[0x09] == 0xEA
 
     cpu.step()
-    assert memory.data[0x0A] == 0xEA
+    assert memory[0x0A] == 0xEA
 
 
 def test_STX_ZPG():
@@ -211,13 +211,13 @@ def test_STX_ZPG():
     assert cpu.X == 0xEA
 
     cpu.step()
-    assert memory.data[0x08] == 0xEA
+    assert memory[0x08] == 0xEA
 
     cpu.step()
-    assert memory.data[0x09] == 0xEA
+    assert memory[0x09] == 0xEA
 
     cpu.step()
-    assert memory.data[0x0A] == 0xEA
+    assert memory[0x0A] == 0xEA
 
 
 def test_TAX():
@@ -457,22 +457,22 @@ def test_DEC_INC_ZPG():
     cpu.Y = 0
 
     cpu.step()
-    assert memory.data[0x08] == 0xFF
+    assert memory[0x08] == 0xFF
     assert cpu.z == 0
     assert cpu.n == 1
 
     cpu.step()
-    assert memory.data[0x08] == 0xFE
+    assert memory[0x08] == 0xFE
     assert cpu.z == 0
     assert cpu.n == 1
 
     cpu.step()
-    assert memory.data[0x08] == 0xFF
+    assert memory[0x08] == 0xFF
     assert cpu.z == 0
     assert cpu.n == 1
 
     cpu.step()
-    assert memory.data[0x08] == 0x00
+    assert memory[0x08] == 0x00
     assert cpu.z == 1
     assert cpu.n == 0
 
@@ -595,9 +595,9 @@ def test_STA_ABS():
     cpu.A = 0xEA
 
     cpu.step()
-    assert memory.data[(0x00 << 8) + 0x06] == 0xEA
+    assert memory[(0x00 << 8) + 0x06] == 0xEA
     cpu.step()
-    assert memory.data[(0x00 << 8) + 0x07] == 0xEA
+    assert memory[(0x00 << 8) + 0x07] == 0xEA
 
 
 def test_STX_ABS():
@@ -607,9 +607,9 @@ def test_STX_ABS():
     cpu.X = 0xEA
 
     cpu.step()
-    assert memory.data[(0x00 << 8) + 0x06] == 0xEA
+    assert memory[(0x00 << 8) + 0x06] == 0xEA
     cpu.step()
-    assert memory.data[(0x00 << 8) + 0x07] == 0xEA
+    assert memory[(0x00 << 8) + 0x07] == 0xEA
 
 
 def test_STY_ABS():
@@ -619,9 +619,9 @@ def test_STY_ABS():
     cpu.Y = 0xEA
 
     cpu.step()
-    assert memory.data[(0x00 << 8) + 0x06] == 0xEA
+    assert memory[(0x00 << 8) + 0x06] == 0xEA
     cpu.step()
-    assert memory.data[(0x00 << 8) + 0x07] == 0xEA
+    assert memory[(0x00 << 8) + 0x07] == 0xEA
 
 
 def test_DEC_INC_ABS():
@@ -633,22 +633,22 @@ def test_DEC_INC_ABS():
     cpu.Y = 0
 
     cpu.step()
-    assert memory.data[(0x00 << 8) + 0x0C] == 0xFF
+    assert memory[(0x00 << 8) + 0x0C] == 0xFF
     assert cpu.z == 0
     assert cpu.n == 1
 
     cpu.step()
-    assert memory.data[(0x00 << 8) + 0x0C] == 0xFE
+    assert memory[(0x00 << 8) + 0x0C] == 0xFE
     assert cpu.z == 0
     assert cpu.n == 1
 
     cpu.step()
-    assert memory.data[(0x00 << 8) + 0x0C] == 0xFF
+    assert memory[(0x00 << 8) + 0x0C] == 0xFF
     assert cpu.z == 0
     assert cpu.n == 1
 
     cpu.step()
-    assert memory.data[(0x00 << 8) + 0x0C] == 0x00
+    assert memory[(0x00 << 8) + 0x0C] == 0x00
     assert cpu.z == 1
     assert cpu.n == 0
 
@@ -702,7 +702,7 @@ def test_STA_ZPG_X():
     assert cpu.X == 0x08
 
     cpu.step()
-    assert memory.data[0x08] == 0x55
+    assert memory[0x08] == 0x55
 
 
 def test_STY_ZPG_X():
@@ -720,7 +720,7 @@ def test_STY_ZPG_X():
     assert cpu.X == 0x08
 
     cpu.step()
-    assert memory.data[0x08] == 0x55
+    assert memory[0x08] == 0x55
 
 
 def test_DEC_INC_ZPG_X():
@@ -732,22 +732,22 @@ def test_DEC_INC_ZPG_X():
     assert cpu.X == 0x0A
 
     cpu.step()
-    assert memory.data[0x0A] == 0xFF
+    assert memory[0x0A] == 0xFF
     assert cpu.z == 0
     assert cpu.n == 1
 
     cpu.step()
-    assert memory.data[0x0A] == 0xFE
+    assert memory[0x0A] == 0xFE
     assert cpu.z == 0
     assert cpu.n == 1
 
     cpu.step()
-    assert memory.data[0x0A] == 0xFF
+    assert memory[0x0A] == 0xFF
     assert cpu.z == 0
     assert cpu.n == 1
 
     cpu.step()
-    assert memory.data[0x0A] == 0x00
+    assert memory[0x0A] == 0x00
     assert cpu.z == 1
     assert cpu.n == 0
 
@@ -799,19 +799,19 @@ def test_STX_ZPG_Y():
     assert cpu.Y == 0x0C
 
     cpu.step()
-    assert memory.data[0x0C] == 0xEA
+    assert memory[0x0C] == 0xEA
 
     cpu.step()
     assert cpu.Y == 0x0D
 
     cpu.step()
-    assert memory.data[0x0D] == 0xEA
+    assert memory[0x0D] == 0xEA
 
     cpu.step()
     assert cpu.Y == 0x0E
 
     cpu.step()
-    assert memory.data[0x0E] == 0xEA
+    assert memory[0x0E] == 0xEA
 
 
 def test_LDA_ABS_X():
@@ -866,13 +866,13 @@ def test_STA_ABS_hi():
     cpu.A = 0x00
 
     cpu.step()
-    assert memory.data[(0x01 << 8) + 0x00] == 0x00
+    assert memory[(0x01 << 8) + 0x00] == 0x00
     cpu.step()
-    assert memory.data[(0x02 << 8) + 0x00] == 0x00
+    assert memory[(0x02 << 8) + 0x00] == 0x00
     cpu.step()
-    assert memory.data[(0x01 << 8) + 0x0F] == 0x00
+    assert memory[(0x01 << 8) + 0x0F] == 0x00
     cpu.step()
-    assert memory.data[(0x02 << 8) + 0x0F] == 0x00
+    assert memory[(0x02 << 8) + 0x0F] == 0x00
 
 
 def test_CMP_IMM():
@@ -983,9 +983,9 @@ def test_CPX_ABS():
     program = [0xA2, 0x0F, 0xEC, 0x00, 0x01, 0xEC, 0x01, 0x01, 0xEC, 0x02, 0x01]
 
     memory = Memory(program + [0xEA] * (0x210 - len(program)))
-    memory.data[(0x01 << 8) + 0x00] = 0x0F
-    memory.data[(0x01 << 8) + 0x01] = 0x0E
-    memory.data[(0x01 << 8) + 0x02] = 0x10
+    memory[(0x01 << 8) + 0x00] = 0x0F
+    memory[(0x01 << 8) + 0x01] = 0x0E
+    memory[(0x01 << 8) + 0x02] = 0x10
     bus = Bus(memory)
     cpu = CPU(bus)
 
@@ -1041,9 +1041,9 @@ def test_CPY_ABS():
     program = [0xA0, 0x0F, 0xCC, 0x00, 0x01, 0xCC, 0x01, 0x01, 0xCC, 0x02, 0x01]
 
     memory = Memory(program + [0xEA] * (0x210 - len(program)))
-    memory.data[(0x01 << 8) + 0x00] = 0x0F
-    memory.data[(0x01 << 8) + 0x01] = 0x0E
-    memory.data[(0x01 << 8) + 0x02] = 0x10
+    memory[(0x01 << 8) + 0x00] = 0x0F
+    memory[(0x01 << 8) + 0x01] = 0x0E
+    memory[(0x01 << 8) + 0x02] = 0x10
     bus = Bus(memory)
     cpu = CPU(bus)
 
@@ -1283,16 +1283,16 @@ def test_AND():
     cpu = CPU(bus)
     cpu.PC = 0x0600
 
-    mem.write(0x0200, 0xA0)  # Used in absolute addressing
-    mem.write(0x0210, 0x0C)  # Used in absolute,X addressing
-    mem.write(0x0220, 0xCC)  # Used in absolute addressing
-    mem.write(0x0240, 0x0F)  # Used in absolute,Y addressing
-    mem.write(0x0050, 0x80)  # Pointer for (indirect,X)
-    mem.write(0x0051, 0x02)
-    mem.write(0x0280, 0x77)  # Value for (indirect,X)
-    mem.write(0x0060, 0x90)  # Pointer for (indirect),Y
-    mem.write(0x0061, 0x02)
-    mem.write(0x0290, 0x99)  # Value for (indirect),Y
+    mem[0x0200] = 0xA0  # Used in absolute addressing
+    mem[0x0210] = 0x0C  # Used in absolute,X addressing
+    mem[0x0220] = 0xCC  # Used in absolute addressing
+    mem[0x0240] = 0x0F  # Used in absolute,Y addressing
+    mem[0x0050] = 0x80  # Pointer for (indirect,X)
+    mem[0x0051] = 0x02
+    mem[0x0280] = 0x77  # Value for (indirect,X)
+    mem[0x0060] = 0x90  # Pointer for (indirect),Y
+    mem[0x0061] = 0x02
+    mem[0x0290] = 0x99  # Value for (indirect),Y
 
     # Execute and verify results
     cpu.step()  # LDA #$F0
@@ -1302,7 +1302,7 @@ def test_AND():
     assert cpu.A == (0xF0 & 0xAA)
 
     cpu.step()  # STA $0200
-    assert mem.read(0x0200) == 0xA0
+    assert mem[0x0200] == 0xA0
 
     cpu.step()  # LDA #$55
     assert cpu.A == 0x55
@@ -1376,16 +1376,16 @@ def test_ORA():
     cpu = CPU(bus)
     cpu.PC = 0x0600
 
-    mem.write(0x0200, 0xFA)  # Used in absolute addressing
-    mem.write(0x0210, 0x0C)  # Used in absolute,X addressing
-    mem.write(0x0220, 0xCC)  # Used in absolute addressing
-    mem.write(0x0240, 0x0F)  # Used in absolute,Y addressing
-    mem.write(0x0050, 0x80)  # Pointer for (indirect,X)
-    mem.write(0x0051, 0x02)
-    mem.write(0x0280, 0x77)  # Value for (indirect,X)
-    mem.write(0x0060, 0x90)  # Pointer for (indirect),Y
-    mem.write(0x0061, 0x02)
-    mem.write(0x0290, 0x99)  # Value for (indirect),Y
+    mem[0x0200] = 0xFA  # Used in absolute addressing
+    mem[0x0210] = 0x0C  # Used in absolute,X addressing
+    mem[0x0220] = 0xCC  # Used in absolute addressing
+    mem[0x0240] = 0x0F  # Used in absolute,Y addressing
+    mem[0x0050] = 0x80  # Pointer for (indirect,X)
+    mem[0x0051] = 0x02
+    mem[0x0280] = 0x77  # Value for (indirect,X)
+    mem[0x0060] = 0x90  # Pointer for (indirect),Y
+    mem[0x0061] = 0x02
+    mem[0x0290] = 0x99  # Value for (indirect),Y
 
     cpu.step()  # LDA #$F0
     assert cpu.A == 0xF0
@@ -1394,7 +1394,7 @@ def test_ORA():
     assert cpu.A == 0xFA
 
     cpu.step()  # STA $0200
-    assert mem.read(0x0200) == 0xFA
+    assert mem[0x0200] == 0xFA
 
     cpu.step()  # LDA #$55
     assert cpu.A == 0x55
@@ -1468,16 +1468,16 @@ def test_EOR():
     cpu = CPU(bus)
     cpu.PC = 0x0600
 
-    mem.write(0x0200, 0x5A)  # Used in absolute addressing
-    mem.write(0x0210, 0x0C)  # Used in absolute,X addressing
-    mem.write(0x0220, 0xCC)  # Used in absolute addressing
-    mem.write(0x0240, 0x0F)  # Used in absolute,Y addressing
-    mem.write(0x0050, 0x80)  # Pointer for (indirect,X)
-    mem.write(0x0051, 0x02)
-    mem.write(0x0280, 0x77)  # Value for (indirect,X)
-    mem.write(0x0060, 0x90)  # Pointer for (indirect),Y
-    mem.write(0x0061, 0x02)
-    mem.write(0x0290, 0x99)  # Value for (indirect),Y
+    mem[0x0200] = 0x5A  # Used in absolute addressing
+    mem[0x0210] = 0x0C  # Used in absolute,X addressing
+    mem[0x0220] = 0xCC  # Used in absolute addressing
+    mem[0x0240] = 0x0F  # Used in absolute,Y addressing
+    mem[0x0050] = 0x80  # Pointer for (indirect,X)
+    mem[0x0051] = 0x02
+    mem[0x0280] = 0x77  # Value for (indirect,X)
+    mem[0x0060] = 0x90  # Pointer for (indirect),Y
+    mem[0x0061] = 0x02
+    mem[0x0290] = 0x99  # Value for (indirect),Y
 
     cpu.step()  # LDA #$F0
     assert cpu.A == 0xF0
@@ -1486,7 +1486,7 @@ def test_EOR():
     assert cpu.A == 0x5A
 
     cpu.step()  # STA $0200
-    assert mem.read(0x0200) == 0x5A
+    assert mem[0x0200] == 0x5A
 
     cpu.step()  # LDA #$55
     assert cpu.A == 0x55
@@ -1562,17 +1562,17 @@ def test_CMP():
     cpu = CPU(bus)
     cpu.PC = 0x0600
 
-    mem.write(0x0010, 0x30)  # Zero page value
-    mem.write(0x0020, 0x80)  # Zero page,X value
-    mem.write(0x0200, 0xF0)  # Absolute addressing value
-    mem.write(0x0210, 0x70)  # Absolute,X value
-    mem.write(0x0220, 0x20)  # Absolute,Y value
-    mem.write(0x0030, 0x90)  # Pointer for (indirect,X)
-    mem.write(0x0031, 0x02)
-    mem.write(0x0290, 0x60)  # Value for (indirect,X)
-    mem.write(0x0040, 0xA0)  # Pointer for (indirect),Y
-    mem.write(0x0041, 0x02)
-    mem.write(0x02A0, 0x90)  # Value for (indirect),Y
+    mem[0x0010] = 0x30  # Zero page value
+    mem[0x0020] = 0x80  # Zero page,X value
+    mem[0x0200] = 0xF0  # Absolute addressing value
+    mem[0x0210] = 0x70  # Absolute,X value
+    mem[0x0220] = 0x20  # Absolute,Y value
+    mem[0x0030] = 0x90  # Pointer for (indirect,X)
+    mem[0x0031] = 0x02
+    mem[0x0290] = 0x60  # Value for (indirect,X)
+    mem[0x0040] = 0xA0  # Pointer for (indirect),Y
+    mem[0x0041] = 0x02
+    mem[0x02A0] = 0x90  # Value for (indirect),Y
 
     # Execute and verify results
     cpu.step()  # LDA #$50

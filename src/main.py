@@ -25,13 +25,13 @@ class Memory:
     def __str__(self):
         return str([f"{x:02x}" for x in self.data])
 
-    def read(self, address):
-        print(f"R {address:#06x}: {self.data[address]:x}")
-        return self.data[address]
-
-    def write(self, address, value):
+    def __setitem__(self, address, value):
         self.data[address] = value
         print(f"W {address:#06x}: {self.data[address]:x}")
+
+    def __getitem__(self, address):
+        print(f"R {address:#06x}: {self.data[address]:x}")
+        return self.data[address]
 
     def dump(self, start=0, end=None):
         if end is None:
@@ -50,12 +50,12 @@ class Bus:
         self.memory = memory
 
     def memory_read(self):
-        self.data = self.memory.read(self.address)
+        self.data = self.memory[self.address]
         return self.data
 
     def memory_write(self, value):
         self.data = value
-        self.memory.write(self.address, self.data)
+        self.memory[self.address] = self.data
 
 
 class CPU:
