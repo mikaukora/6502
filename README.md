@@ -42,6 +42,8 @@ The emulator currently supports the following 6502 instructions:
   - `AND` - AND with Accumulator
   - `EOR` - XOR with Accumulator
   - `ORA` - OR with Accumulator
+- **Shift & Rotate Instructions**
+  - `ASL` - Arithmetic Shift Left
 - **Flag Instructions**
   - `CLC` - Clear Carry
   - `CLD` - Clear Decimal (BCD arithmetics disabled)

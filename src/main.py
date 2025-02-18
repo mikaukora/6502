@@ -165,6 +165,11 @@ class CPU:
             self.fetch()
             hh = self.data
             return toUint16(hh, ll)
+        elif self.addressing_mode == m.ABS_X:
+            ll = self.data
+            self.fetch()
+            hh = self.data
+            return toUint16(hh, ll) + self.X
         elif self.addressing_mode == m.ZPG_X:
             return uint8(self.data + self.X)
         elif self.addressing_mode == m.ZPG_Y:
@@ -360,6 +365,20 @@ class CPU:
                 self.n = (value >> 7) & 0x01
                 self.v = (value >> 6) & 0x01
                 self.z = (value & self.A) == 0
+            case i.ASL:
+                if self.addressing_mode == m.A:
+                    self.c = (self.A >> 7) & 0x01
+                    self.A = uint8(self.A << 1)
+                    self.z = self.calc_z(self.A)
+                    self.n = self.calc_n(self.A)
+                else:
+                    dst = self.get_addr()
+                    value = self.read(dst)
+                    self.c = (value >> 7) & 0x01
+                    value = uint8(value << 1)
+                    self.z = self.calc_z(value)
+                    self.n = self.calc_n(value)
+                    self.write(dst, value)
             case _:  # default
                 raise NotImplementedError(f"Instruction {self.instruction} not implemented")
 

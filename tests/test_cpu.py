@@ -1770,7 +1770,6 @@ def test_PHP_PLP():
 
     # PHP: Push Processor Status onto Stack
     cpu.step()
-    mem.dump(0x01f0, 0x1ff)
     assert mem[0x0100 + cpu.S + 1] == 0b00011001, "Break and 5th flags should be set in stack copy"
 
     # CLC: Clear Carry Flag
@@ -1831,3 +1830,80 @@ def test_BIT():
     assert cpu.n == 0, "N flag should be clear"
     assert cpu.v == 0, "V flag should be clear"
     assert cpu.z == 1, "Z flag should be set"
+
+
+def test_ASL():
+    program = [
+        0xA9, 0x40,        # LDA #$40   (Load A with $40)
+        0x0A,              # ASL A      (Shift left in accumulator)
+
+        0xA9, 0x80,        # LDA #$80   (Load A with $80)
+        0x0A,              # ASL A      (Shift left in accumulator, should set carry)
+
+        0xA9, 0x01,        # LDA #$01   (Load A with $01)
+        0x85, 0x10,        # STA $10    (Store in zero-page)
+        0x06, 0x10,        # ASL $10    (Shift left zero-page)
+
+        0xA9, 0x02,        # LDA #$02   (Load A with $02)
+        0x95, 0x20,        # STA $20,X  (Store at zero-page,X)
+        0x16, 0x20,        # ASL $20,X  (Shift left zero-page,X)
+
+        0xA9, 0x04,        # LDA #$04   (Load A with $04)
+        0x8D, 0x30, 0x06,  # STA $0630  (Store in absolute memory)
+        0x0E, 0x30, 0x06,  # ASL $0630  (Shift left absolute)
+
+        0xA9, 0x08,        # LDA #$08   (Load A with $08)
+        0x8D, 0x41, 0x06,  # STA $0641  (Store in absolute memory)
+        0x1E, 0x40, 0x06   # ASL $0640,X (Shift left absolute,X)
+    ]
+
+    mem = Memory([0xEA] * 0x600 + program + [0xEA] * (0x1000 - len(program)))
+    bus = Bus(mem)
+    cpu = CPU(bus)
+    cpu.PC = 0x0600
+    cpu.X = 0x01  # Set X register for indexed addressing
+
+    # ASL A (accumulator)
+    cpu.step()  # LDA #$40
+    cpu.step()  # ASL A
+    assert cpu.A == 0x80, "Accumulator should shift left to $80"
+    assert cpu.c == 0, "Carry should be clear"
+    assert cpu.n == 1, "Negative flag should be set"
+    assert cpu.z == 0, "Zero flag should be clear"
+
+    cpu.step()  # LDA #$80
+    cpu.step()  # ASL A
+    assert cpu.A == 0x00, "Accumulator should shift left to $00"
+    assert cpu.c == 1, "Carry should be set"
+    assert cpu.n == 0, "Negative flag should be clear"
+    assert cpu.z == 1, "Zero flag should be set"
+
+    # ASL $10 (zero-page)
+    cpu.step()  # LDA #$01
+    cpu.step()  # STA $10
+    cpu.step()  # ASL $10
+    assert mem[0x0010] == 0x02, "Memory at $10 should be $02 after shift"
+    assert cpu.c == 0, "Carry should be clear"
+    assert cpu.n == 0, "Negative flag should be clear"
+    assert cpu.z == 0, "Zero flag should be clear"
+
+    # ASL $20,X (zero-page,X)
+    cpu.step()  # LDA #$02
+    cpu.step()  # STA $20,X
+    cpu.step()  # ASL $20,X
+    assert mem[0x0021] == 0x04, "Memory at $0021 should be $04 after shift"
+    assert cpu.c == 0, "Carry should be clear"
+
+    # ASL $0630 (absolute)
+    cpu.step()  # LDA #$04
+    cpu.step()  # STA $0630
+    cpu.step()  # ASL $0630
+    assert mem[0x0630] == 0x08, "Memory at $0630 should be $08 after shift"
+    assert cpu.c == 0, "Carry should be clear"
+
+    # ASL $0640,X (absolute,X)
+    cpu.step()  # LDA #$08
+    cpu.step()  # STA $0641
+    cpu.step()  # ASL $0640,X
+    assert mem[0x0641] == 0x10, "Memory at $0641 should be $10 after shift"
+    assert cpu.c == 0, "Carry should be clear"

@@ -84,8 +84,8 @@ m = AddressingMode
 # fmt: off
 standard: List[List[Optional[Tuple[Instruction, AddressingMode]]]] = [
         #0     1     2     3     4     5     6     7     8     9     A     B     C     D     E     F
-        [None, (i.ORA, m.IND_X), None, None, None, (i.ORA, m.ZPG), None, None, (i.PHP, m.IMPL), (i.ORA, m.IMM), None, None, None, (i.ORA, m.ABS), None, None], # 0
-        [(i.BPL, m.REL), (i.ORA, m.IND_Y), None, None, None, (i.ORA, m.ZPG_X), None, None, (i.CLC, m.IMPL), (i.ORA,m.ABS_Y), None, None, None, (i.ORA,m.ABS_X), None, None], # 1
+        [None, (i.ORA, m.IND_X), None, None, None, (i.ORA, m.ZPG), (i.ASL, m.ZPG), None, (i.PHP, m.IMPL), (i.ORA, m.IMM), (i.ASL, m.A), None, None, (i.ORA, m.ABS), (i.ASL, m.ABS), None], # 0
+        [(i.BPL, m.REL), (i.ORA, m.IND_Y), None, None, None, (i.ORA, m.ZPG_X), (i.ASL, m.ZPG_X), None, (i.CLC, m.IMPL), (i.ORA,m.ABS_Y), None, None, None, (i.ORA,m.ABS_X), (i.ASL, m.ABS_X), None], # 1
         [(i.JSR, m.ABS), (i.AND, m.IND_X), None, None, (i.BIT, m.ZPG), (i.AND, m.ZPG), None, None, (i.PLP, m.IMPL), (i.AND, m.IMM), None, None, (i.BIT, m.ABS), (i.AND, m.ABS), None, None], # 2
         [(i.BMI, m.REL), (i.AND, m.IND_Y), None, None, None, (i.AND, m.ZPG_X), None, None, (i.SEC, m.IMPL), (i.AND, m.ABS_Y), None, None, None, (i.AND, m.ABS_X), None, None], # 3
         [None, (i.EOR, m.IND_X), None, None, (i.EOR, m.ZPG), None, None, None, (i.PHA, m.IMPL), (i.EOR, m.IMM), None, None, (i.JMP, m.ABS), (i.EOR, m.ABS), None, None], # 4
