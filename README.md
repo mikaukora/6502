@@ -29,6 +29,8 @@ The emulator currently supports the following 6502 instructions:
 - **Stack Instructions**
   - `PHA` - Push Accumulator
   - `PLA` - Pull Accumulator
+  - `PHP` - Push Status Register
+  - `PLP` - Pull Status Register
 - **Decrements & Increments**
   - `DEC` - Decrement memory
   - `DEX` - Decrement X

@@ -81,16 +81,15 @@ class CPU:
         RESET = "\033[0m"
         return (
             f"{GREEN}"
-            f"A: {cpu.A:#04x}\tX: {cpu.X:#04x}\tY: {cpu.Y:#04x}\tS: {cpu.S:#04x}\n"
-            f"P: {cpu.P:#04x}\t"
-            f"Z: {cpu.z} "
-            f"N: {cpu.n} "
-            f"V: {cpu.v} "
-            f"B: {cpu.b} "
-            f"D: {cpu.d} "
-            f"I: {cpu.i} "
-            f"C: {cpu.c}\n"
-            f"PC: {cpu.PC:#06x}"
+            f"A: {self.A:#04x}\tX: {self.X:#04x}\tY: {self.Y:#04x}\tS: {self.S:#04x}\n"
+            f"P: {self.P:#04x}\t"
+            f"Z: {self.z} "
+            f"N: {self.n} "
+            f"V: {self.v} "
+            f"D: {self.d} "
+            f"I: {self.i} "
+            f"C: {self.c}\n"
+            f"PC: {self.PC:#06x}"
             f"{RESET}"
         )
 
@@ -352,6 +351,10 @@ class CPU:
                 ll = self.stack_pop()
                 hh = self.stack_pop()
                 self.PC = toUint16(hh, ll)
+            case i.PHP:
+                self.stack_push(self.P | 0x18)
+            case i.PLP:
+                self.P = self.stack_pop() & ~(0x18)
             case _:  # default
                 raise NotImplementedError(f"Instruction {self.instruction} not implemented")
 

@@ -1749,3 +1749,34 @@ def test_JSR_RTS_nested():
 
     cpu.step()  # RTS (Return from first subroutine)
     assert cpu.PC == 0x0603  # Should return to main program after JSR
+
+
+def test_PHP_PLP():
+    program = [
+        0x38,        # SEC         (Set Carry Flag)
+        0x08,        # PHP         (Push Processor Status onto Stack)
+        0x18,        # CLC         (Clear Carry Flag)
+        0x28         # PLP         (Pull Processor Status from Stack)
+    ]
+
+    mem = Memory([0xEA] * 0x600 + program + [0xEA] * (0x1000 - len(program)))
+    bus = Bus(mem)
+    cpu = CPU(bus)
+    cpu.PC = 0x0600
+
+    # SEC: Set Carry Flag
+    cpu.step()
+    assert cpu.c == 1, "Carry flag should be set"
+
+    # PHP: Push Processor Status onto Stack
+    cpu.step()
+    mem.dump(0x01f0, 0x1ff)
+    assert mem[0x0100 + cpu.S + 1] == 0b00011001, "Break and 5th flags should be set in stack copy"
+
+    # CLC: Clear Carry Flag
+    cpu.step()
+    assert cpu.c == 0, "Carry flag should be cleared"
+
+    # PLP: Pull Processor Status from Stack
+    cpu.step()
+    assert cpu.c == 1, "Carry flag should be restored"
