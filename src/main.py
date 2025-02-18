@@ -355,6 +355,11 @@ class CPU:
                 self.stack_push(self.P | 0x18)
             case i.PLP:
                 self.P = self.stack_pop() & ~(0x18)
+            case i.BIT:
+                value = self.get_data()
+                self.n = (value >> 7) & 0x01
+                self.v = (value >> 6) & 0x01
+                self.z = (value & self.A) == 0
             case _:  # default
                 raise NotImplementedError(f"Instruction {self.instruction} not implemented")
 

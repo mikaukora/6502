@@ -1780,3 +1780,54 @@ def test_PHP_PLP():
     # PLP: Pull Processor Status from Stack
     cpu.step()
     assert cpu.c == 1, "Carry flag should be restored"
+
+
+def test_BIT():
+    program = [
+        0xA9, 0xFF,        # LDA #$FF   (Load A with all bits set)
+        0x24, 0x10,        # BIT $10    (Zero-page mode)
+        0x2C, 0x20, 0x06,  # BIT $0620  (Absolute mode)
+
+        0xA9, 0x00,        # LDA #$00   (Load A with zero)
+        0x24, 0x11,        # BIT $11    (Zero-page mode)
+        0x2C, 0x21, 0x06   # BIT $0621  (Absolute mode)
+    ]
+
+    mem = Memory([0xEA] * 0x600 + program + [0xEA] * (0x1000 - len(program)))
+    bus = Bus(mem)
+    cpu = CPU(bus)
+    cpu.PC = 0x0600
+
+    # Set up memory values for BIT tests
+    mem[0x0010] = 0b11000000  # Zero-page: N=1, V=1, Z=0
+    mem[0x0620] = 0b01000000  # Absolute: N=0, V=1, Z=0
+    mem[0x0011] = 0b11000000  # Zero-page: N=1, V=1, Z=1 (A=0)
+    mem[0x0621] = 0b00000000  # Absolute: N=0, V=0, Z=1 (A=0)
+
+    # Load A with $FF and test BIT (zero-page)
+    cpu.step()  # LDA #$FF
+    assert cpu.A == 0xFF
+
+    cpu.step()  # BIT $10 (zero-page)
+    assert cpu.n == 1, "N flag should be set"
+    assert cpu.v == 1, "V flag should be set"
+    assert cpu.z == 0, "Z flag should NOT be set"
+
+    cpu.step()  # BIT $0620 (absolute)
+    assert cpu.n == 0, "N flag should be clear"
+    assert cpu.v == 1, "V flag should be set"
+    assert cpu.z == 0, "Z flag should NOT be set"
+
+    # Load A with $00 and test BIT (zero-page)
+    cpu.step()  # LDA #$00
+    assert cpu.A == 0x00
+
+    cpu.step()  # BIT $11 (zero-page)
+    assert cpu.n == 1, "N flag should be set"
+    assert cpu.v == 1, "V flag should be set"
+    assert cpu.z == 1, "Z flag should be set"
+
+    cpu.step()  # BIT $0621 (absolute)
+    assert cpu.n == 0, "N flag should be clear"
+    assert cpu.v == 0, "V flag should be clear"
+    assert cpu.z == 1, "Z flag should be set"

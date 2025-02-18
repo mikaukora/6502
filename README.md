@@ -66,6 +66,7 @@ The emulator currently supports the following 6502 instructions:
   - `JSR` - Jump to Subroutine
   - `RTS` - Return from Subroutine
 - **Other**
+  - `BIT` - Bit Test (Memory & Accumulator)
   - `NOP` - No Operation
 
 ### List instructions
