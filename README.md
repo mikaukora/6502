@@ -45,6 +45,7 @@ The emulator currently supports the following 6502 instructions:
 - **Shift & Rotate Instructions**
   - `ASL` - Arithmetic Shift Left
   - `LSR` - Logical Shift Right
+  - `ROL` - Rotate Left
   - `ROR` - Rotate Right
 - **Flag Instructions**
   - `CLC` - Clear Carry
