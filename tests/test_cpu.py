@@ -1907,3 +1907,158 @@ def test_ASL():
     cpu.step()  # ASL $0640,X
     assert mem[0x0641] == 0x10, "Memory at $0641 should be $10 after shift"
     assert cpu.c == 0, "Carry should be clear"
+
+
+def test_LSR():
+    program = [
+        0xA9, 0x80,        # LDA #$80   (Load A with $80)
+        0x4A,              # LSR A      (Shift right in accumulator)
+
+        0xA9, 0x01,        # LDA #$01   (Load A with $01)
+        0x4A,              # LSR A      (Shift right in accumulator, should set carry)
+
+        0xA9, 0x04,        # LDA #$04   (Load A with $04)
+        0x85, 0x10,        # STA $10    (Store in zero-page)
+        0x46, 0x10,        # LSR $10    (Shift right zero-page)
+
+        0xA9, 0x08,        # LDA #$08   (Load A with $08)
+        0x95, 0x20,        # STA $20,X  (Store at zero-page,X)
+        0x56, 0x20,        # LSR $20,X  (Shift right zero-page,X)
+
+        0xA9, 0x10,        # LDA #$10   (Load A with $10)
+        0x8D, 0x30, 0x06,  # STA $0630  (Store in absolute memory)
+        0x4E, 0x30, 0x06,  # LSR $0630  (Shift right absolute)
+
+        0xA9, 0x20,        # LDA #$20   (Load A with $20)
+        0x8D, 0x41, 0x06,  # STA $0641  (Store in absolute memory)
+        0x5E, 0x40, 0x06   # LSR $0640,X (Shift right absolute,X)
+    ]
+
+    mem = Memory([0xEA] * 0x600 + program + [0xEA] * (0x1000 - len(program)))
+    bus = Bus(mem)
+    cpu = CPU(bus)
+    cpu.PC = 0x0600
+    cpu.X = 0x01  # Set X register for indexed addressing
+
+    # LSR A (accumulator)
+    cpu.step()  # LDA #$80
+    cpu.step()  # LSR A
+    assert cpu.A == 0x40, "Accumulator should shift right to $40"
+    assert cpu.c == 0, "Carry should be clear"
+    assert cpu.n == 0, "Negative flag should be clear"
+    assert cpu.z == 0, "Zero flag should be clear"
+
+    cpu.step()  # LDA #$01
+    cpu.step()  # LSR A
+    assert cpu.A == 0x00, "Accumulator should shift right to $00"
+    assert cpu.c == 1, "Carry should be set"
+    assert cpu.n == 0, "Negative flag should be clear"
+    assert cpu.z == 1, "Zero flag should be set"
+
+    # LSR $10 (zero-page)
+    cpu.step()  # LDA #$04
+    cpu.step()  # STA $10
+    cpu.step()  # LSR $10
+    assert mem[0x0010] == 0x02, "Memory at $10 should be $02 after shift"
+    assert cpu.c == 0, "Carry should be clear"
+    assert cpu.n == 0, "Negative flag should be clear"
+    assert cpu.z == 0, "Zero flag should be clear"
+
+    # LSR $20,X (zero-page,X)
+    cpu.step()  # LDA #$08
+    cpu.step()  # STA $20,X
+    cpu.step()  # LSR $20,X
+    assert mem[0x0021] == 0x04, "Memory at $0021 should be $04 after shift"
+    assert cpu.c == 0, "Carry should be clear"
+
+    # LSR $0630 (absolute)
+    cpu.step()  # LDA #$10
+    cpu.step()  # STA $0630
+    cpu.step()  # LSR $0630
+    assert mem[0x0630] == 0x08, "Memory at $0630 should be $08 after shift"
+    assert cpu.c == 0, "Carry should be clear"
+
+    # LSR $0640,X (absolute,X)
+    cpu.step()  # LDA #$20
+    cpu.step()  # STA $0641
+    cpu.step()  # LSR $0640,X
+    assert mem[0x0641] == 0x10, "Memory at $0641 should be $10 after shift"
+    assert cpu.c == 0, "Carry should be clear"
+
+
+def test_ROR():
+    program = [
+        0xA9, 0x80,        # LDA #$80   (Load A with $80)
+        0x6A,              # ROR A      (Rotate right in accumulator)
+
+        0xA9, 0x01,        # LDA #$01   (Load A with $01)
+        0x6A,              # ROR A      (Rotate right in accumulator, should set carry)
+
+        0xA9, 0x04,        # LDA #$04   (Load A with $04)
+        0x85, 0x10,        # STA $10    (Store in zero-page)
+        0x66, 0x10,        # ROR $10    (Rotate right zero-page)
+
+        0xA9, 0x08,        # LDA #$08   (Load A with $08)
+        0x95, 0x20,        # STA $20,X  (Store at zero-page,X)
+        0x76, 0x20,        # ROR $20,X  (Rotate right zero-page,X)
+
+        0xA9, 0x10,        # LDA #$10   (Load A with $10)
+        0x8D, 0x30, 0x06,  # STA $0630  (Store in absolute memory)
+        0x6E, 0x30, 0x06,  # ROR $0630  (Rotate right absolute)
+
+        0xA9, 0x20,        # LDA #$20   (Load A with $20)
+        0x8D, 0x41, 0x06,  # STA $0641  (Store in absolute memory)
+        0x7E, 0x40, 0x06   # ROR $0640,X (Rotate right absolute,X)
+    ]
+
+    mem = Memory([0xEA] * 0x600 + program + [0xEA] * (0x1000 - len(program)))
+    bus = Bus(mem)
+    cpu = CPU(bus)
+    cpu.PC = 0x0600
+    cpu.X = 0x01  # Set X register for indexed addressing
+
+    # ROR A (accumulator)
+    cpu.step()  # LDA #$80
+    cpu.step()  # ROR A
+    assert cpu.A == 0x40, "Accumulator should rotate right to $40"
+    assert cpu.c == 0, "Carry should be clear"
+    assert cpu.n == 0, "Negative flag should be clear"
+    assert cpu.z == 0, "Zero flag should be clear"
+
+    cpu.step()  # LDA #$01
+    cpu.step()  # ROR A
+    assert cpu.A == 0x00, "Accumulator should rotate right to $00"
+    assert cpu.c == 1, "Carry should be set"
+    assert cpu.n == 0, "Negative flag should be clear"
+    assert cpu.z == 1, "Zero flag should be set"
+
+    cpu.c = 0
+    # ROR $10 (zero-page)
+    cpu.step()  # LDA #$04
+    cpu.step()  # STA $10
+    cpu.step()  # ROR $10
+    assert mem[0x0010] == 0x02, "Memory at $10 should be $02 after rotate"
+    assert cpu.c == 0, "Carry should be clear"
+    assert cpu.n == 0, "Negative flag should be clear"
+    assert cpu.z == 0, "Zero flag should be clear"
+
+    # ROR $20,X (zero-page,X)
+    cpu.step()  # LDA #$08
+    cpu.step()  # STA $20,X
+    cpu.step()  # ROR $20,X
+    assert mem[0x0021] == 0x04, "Memory at $0021 should be $04 after rotate"
+    assert cpu.c == 0, "Carry should be clear"
+
+    # ROR $0630 (absolute)
+    cpu.step()  # LDA #$10
+    cpu.step()  # STA $0630
+    cpu.step()  # ROR $0630
+    assert mem[0x0630] == 0x08, "Memory at $0630 should be $08 after rotate"
+    assert cpu.c == 0, "Carry should be clear"
+
+    # ROR $0640,X (absolute,X)
+    cpu.step()  # LDA #$20
+    cpu.step()  # STA $0641
+    cpu.step()  # ROR $0640,X
+    assert mem[0x0641] == 0x10, "Memory at $0641 should be $10 after rotate"
+    assert cpu.c == 0, "Carry should be clear"

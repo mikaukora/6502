@@ -379,6 +379,36 @@ class CPU:
                     self.z = self.calc_z(value)
                     self.n = self.calc_n(value)
                     self.write(dst, value)
+            case i.LSR:
+                if self.addressing_mode == m.A:
+                    self.c = self.A & 0x01
+                    self.A = uint8(self.A >> 1)
+                    self.z = self.calc_z(self.A)
+                    self.n = self.calc_n(self.A)
+                else:
+                    dst = self.get_addr()
+                    value = self.read(dst)
+                    self.c = value & 0x01
+                    value = uint8(value >> 1)
+                    self.z = self.calc_z(value)
+                    self.n = self.calc_n(value)
+                    self.write(dst, value)
+            case i.ROR:
+                if self.addressing_mode == m.A:
+                    lsb = self.A & 0x01
+                    self.A = (( self.c & 0x01 ) << 7) | uint8(self.A >> 1)
+                    self.c = lsb
+                    self.z = self.calc_z(self.A)
+                    self.n = self.calc_n(self.A)
+                else:
+                    dst = self.get_addr()
+                    value = self.read(dst)
+                    lsb = value & 0x01
+                    value = (( self.c & 0x01 ) << 7) | uint8(value >> 1)
+                    self.c = lsb
+                    self.z = self.calc_z(value)
+                    self.n = self.calc_n(value)
+                    self.write(dst, value)
             case _:  # default
                 raise NotImplementedError(f"Instruction {self.instruction} not implemented")
 

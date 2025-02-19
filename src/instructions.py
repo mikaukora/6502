@@ -88,10 +88,10 @@ standard: List[List[Optional[Tuple[Instruction, AddressingMode]]]] = [
         [(i.BPL, m.REL), (i.ORA, m.IND_Y), None, None, None, (i.ORA, m.ZPG_X), (i.ASL, m.ZPG_X), None, (i.CLC, m.IMPL), (i.ORA,m.ABS_Y), None, None, None, (i.ORA,m.ABS_X), (i.ASL, m.ABS_X), None], # 1
         [(i.JSR, m.ABS), (i.AND, m.IND_X), None, None, (i.BIT, m.ZPG), (i.AND, m.ZPG), None, None, (i.PLP, m.IMPL), (i.AND, m.IMM), None, None, (i.BIT, m.ABS), (i.AND, m.ABS), None, None], # 2
         [(i.BMI, m.REL), (i.AND, m.IND_Y), None, None, None, (i.AND, m.ZPG_X), None, None, (i.SEC, m.IMPL), (i.AND, m.ABS_Y), None, None, None, (i.AND, m.ABS_X), None, None], # 3
-        [None, (i.EOR, m.IND_X), None, None, (i.EOR, m.ZPG), None, None, None, (i.PHA, m.IMPL), (i.EOR, m.IMM), None, None, (i.JMP, m.ABS), (i.EOR, m.ABS), None, None], # 4
-        [None, (i.EOR, m.IND_Y), None, None, None, (i.EOR, m.ZPG_X), None, None, (i.CLI, m.IMPL), (i.EOR, m.ABS_Y), None, None, None, (i.EOR, m.ABS_X), None, None], # 5
-        [(i.RTS, m.ABS), None, None, None, None, None, None, None, (i.PLA, m.IMPL), None, None, None, (i.JMP, m.IND), None, None, None], # 6
-        [None, None, None, None, None, None, None, None, (i.SEI, m.IMPL), None, None, None, None, None, None, None], # 7
+        [None, (i.EOR, m.IND_X), None, None, (i.EOR, m.ZPG), None, (i.LSR, m.ZPG), None, (i.PHA, m.IMPL), (i.EOR, m.IMM), (i.LSR, m.A), None, (i.JMP, m.ABS), (i.EOR, m.ABS), (i.LSR, m.ABS), None], # 4
+        [None, (i.EOR, m.IND_Y), None, None, None, (i.EOR, m.ZPG_X), (i.LSR, m.ZPG_X), None, (i.CLI, m.IMPL), (i.EOR, m.ABS_Y), None, None, None, (i.EOR, m.ABS_X), (i.LSR, m.ABS_X), None], # 5
+        [(i.RTS, m.ABS), None, None, None, None, None, (i.ROR, m.ZPG), None, (i.PLA, m.IMPL), None, (i.ROR, m.A), None, (i.JMP, m.IND), None, (i.ROR, m.ABS), None], # 6
+        [None, None, None, None, None, None, (i.ROR, m.ZPG_X), None, (i.SEI, m.IMPL), None, None, None, None, None, (i.ROR, m.ABS_X), None], # 7
         [None, None, None, None, (i.STY, m.ZPG), (i.STA, m.ZPG), (i.STX, m.ZPG), None, (i.DEY, m.IMPL), None, (i.TXA, m.IMPL), None, (i.STY, m.ABS), (i.STA, m.ABS), (i.STX, m.ABS), None], # 8
         [(i.BCC, m.REL), None, None, None, (i.STY, m.ZPG_X), (i.STA, m.ZPG_X), (i.STX, m.ZPG_Y), None, (i.TYA, m.IMPL), None, (i.TXS, m.IMPL), None, None, None, None, None ], # 9
         [(i.LDY, m.IMM), None, (i.LDX, m.IMM), None, (i.LDY, m.ZPG), (i.LDA, m.ZPG), (i.LDX, m.ZPG), None, (i.TAY, m.IMPL), (i.LDA, m.IMM), (i.TAX, m.IMPL), None, (i.LDY, m.ABS), (i.LDA, m.ABS), (i.LDX, m.ABS), None], # A
