@@ -1,3 +1,4 @@
+import pytest
 from src.main import CPU, Bus, Memory
 
 
@@ -2142,3 +2143,235 @@ def test_ROL():
     cpu.step()  # ROL $0640,X
     assert mem[0x0641] == 0x10, "Memory at $0641 should be $10 after rotate"
     assert cpu.c == 0, "Carry should be clear"
+
+
+def test_ADC_binary():
+    program = [
+        0xA9, 0x10,        # LDA #$10   (Load A with $10)
+        0x69, 0x05,        # ADC #$05   (Add immediate, should be $15)
+
+        0xA9, 0xF0,        # LDA #$F0   (Load A with $F0)
+        0x69, 0x10,        # ADC #$10   (Add immediate, should be $00 with carry set)
+
+        0xA9, 0x7F,        # LDA #$7F   (Load A with $7F)
+        0x69, 0x01,        # ADC #$01   (Add immediate, should set overflow flag)
+
+        0xA9, 0x01,        # LDA #$01   (Load A with $01)
+        0x85, 0x10,        # STA $10    (Store in zero-page)
+        0x65, 0x10,        # ADC $10    (Add zero-page)
+
+        0xA9, 0x02,        # LDA #$02   (Load A with $02)
+        0x95, 0x20,        # STA $20,X  (Store at zero-page,X)
+        0x75, 0x20,        # ADC $20,X  (Add zero-page,X)
+
+        0xA9, 0x04,        # LDA #$04   (Load A with $04)
+        0x8D, 0x30, 0x06,  # STA $0630  (Store in absolute memory)
+        0x6D, 0x30, 0x06,  # ADC $0630  (Add absolute)
+
+        0xA9, 0x08,        # LDA #$08   (Load A with $08)
+        0x8D, 0x41, 0x06,  # STA $0641  (Store in absolute memory)
+        0x7D, 0x40, 0x06   # ADC $0640,X (Add absolute,X)
+    ]
+
+    mem = Memory([0xEA] * 0x600 + program + [0xEA] * (0x1000 - len(program)))
+    bus = Bus(mem)
+    cpu = CPU(bus)
+    cpu.PC = 0x0600
+    cpu.X = 0x01  # Set X register for indexed addressing
+
+    # ADC #$05 (immediate)
+    cpu.step()  # LDA #$10
+    cpu.step()  # ADC #$05
+    assert cpu.A == 0x15, "Accumulator should be $15"
+    assert cpu.c == 0, "Carry should be clear"
+    assert cpu.v == 0, "Overflow should be clear"
+
+    # ADC #$10 (overflow + carry)
+    cpu.step()  # LDA #$F0
+    cpu.step()  # ADC #$10
+    assert cpu.A == 0x00, "Accumulator should wrap to $00"
+    assert cpu.c == 1, "Carry should be set"
+
+    # ADC #$01 (overflow case)
+    cpu.step()  # LDA #$7F
+    cpu.step()  # ADC #$01
+    assert cpu.v == 1, "Overflow should be set"
+
+    # ADC $10 (zero-page)
+    cpu.step()  # LDA #$01
+    cpu.step()  # STA $10
+    cpu.step()  # ADC $10
+    assert cpu.A == 0x02, "Accumulator should be $02"
+
+    # ADC $20,X (zero-page,X)
+    cpu.step()  # LDA #$02
+    cpu.step()  # STA $20,X
+    cpu.step()  # ADC $20,X
+    assert cpu.A == 0x04, "Accumulator should be $04"
+
+    # ADC $0630 (absolute)
+    cpu.step()  # LDA #$04
+    cpu.step()  # STA $0630
+    cpu.step()  # ADC $0630
+    assert cpu.A == 0x08, "Accumulator should be $08"
+
+    # ADC $0640,X (absolute,X)
+    cpu.step()  # LDA #$08
+    cpu.step()  # STA $0641
+    cpu.step()  # ADC $0640,X
+    assert cpu.A == 0x10, "Accumulator should be $10"
+
+
+@pytest.mark.skip(reason="not implemented")
+def test_ADC_decimal():
+    program = [
+        0xF8,              # SED        (Set Decimal Mode)
+        0xA9, 0x25,        # LDA #$25   (Load A with $25)
+        0x69, 0x18,        # ADC #$18   (Add immediate, expected result $43 in BCD)
+
+        0xA9, 0x99,        # LDA #$99   (Load A with $99)
+        0x69, 0x01,        # ADC #$01   (Add immediate, expected result $00 with carry)
+
+        0xD8,              # CLD        (Clear Decimal Mode)
+        0xA9, 0x12,        # LDA #$12   (Load A with $12)
+        0x69, 0x34         # ADC #$34   (Back to binary mode, expected $46)
+    ]
+
+    mem = Memory([0xEA] * 0x600 + program + [0xEA] * (0x1000 - len(program)))
+    bus = Bus(mem)
+    cpu = CPU(bus)
+    cpu.PC = 0x0600
+
+    # ADC in Decimal Mode
+    cpu.step()  # SED
+    cpu.step()  # LDA #$25
+    cpu.step()  # ADC #$18
+    assert cpu.A == 0x43, "Accumulator should be $43 in BCD"
+    assert cpu.c == 0, "Carry should be clear"
+
+    # ADC #$01 (decimal carry case)
+    cpu.step()  # LDA #$99
+    cpu.step()  # ADC #$01
+    assert cpu.A == 0x00, "Accumulator should wrap to $00"
+    assert cpu.c == 1, "Carry should be set"
+
+    # Clear Decimal Mode and Test Binary Addition
+    cpu.step()  # CLD
+    cpu.step()  # LDA #$12
+    cpu.step()  # ADC #$34
+    assert cpu.A == 0x46, "Accumulator should be $46 in binary mode"
+
+
+def test_SBC_binary():
+    program = [
+        0xA9, 0x10,        # LDA #$10   (Load A with $10)
+        0xE9, 0x05,        # SBC #$05   (Subtract immediate, expected result $0B)
+
+        0xA9, 0x00,        # LDA #$00   (Load A with $00)
+        0xE9, 0x01,        # SBC #$01   (Subtract immediate, expected result $FE with carry clear)
+
+        0xA9, 0x80,        # LDA #$80   (Load A with $80)
+        0xE9, 0x01,        # SBC #$01   (Subtract immediate, expected result $7E, should set overflow)
+
+        0xA9, 0x05,        # LDA #$05   (Load A with $05)
+        0x85, 0x10,        # STA $10    (Store in zero-page)
+        0xE5, 0x10,        # SBC $10    (Subtract zero-page, expected $00)
+
+        0xA9, 0x10,        # LDA #$10   (Load A with $10)
+        0x95, 0x20,        # STA $20,X  (Store at zero-page,X)
+        0xF5, 0x20,        # SBC $20,X  (Subtract zero-page,X, expected $00)
+
+        0xA9, 0x20,        # LDA #$20   (Load A with $20)
+        0x8D, 0x30, 0x06,  # STA $0630  (Store in absolute memory)
+        0xED, 0x30, 0x06,  # SBC $0630  (Subtract absolute, expected $00)
+    ]
+
+    mem = Memory([0xEA] * 0x600 + program + [0xEA] * (0x1000 - len(program)))
+    bus = Bus(mem)
+    cpu = CPU(bus)
+    cpu.PC = 0x0600
+    cpu.X = 0x01  # Set X register for indexed addressing
+    cpu.c = 1  # Ensure carry is set before SBC (as SBC subtracts (M + C))
+
+    # SBC #$05 (immediate)
+    cpu.step()  # LDA #$10
+    cpu.step()  # SBC #$05
+    assert cpu.A == 0x0B, "Accumulator should be $0B"
+    assert cpu.c == 1, "Carry should be set"
+
+    # SBC #$01 (underflow case)
+    cpu.step()  # LDA #$00
+    cpu.c = 1   # Ensure carry set before SBC
+    cpu.step()  # SBC #$01
+    assert cpu.A == 0xFF, "Accumulator should be $FF"
+    assert cpu.c == 0, "Carry should be clear"
+
+    # SBC #$01 (overflow case)
+    cpu.step()  # LDA #$80
+    cpu.c = 1
+    cpu.step()  # SBC #$01
+    assert cpu.A == 0x7F, "Accumulator should be $7F"
+    assert cpu.v == 1, "Overflow should be set"
+
+    # SBC $10 (zero-page)
+    cpu.step()  # LDA #$05
+    cpu.step()  # STA $10
+    cpu.c = 1
+    cpu.step()  # SBC $10
+    assert cpu.A == 0x00, "Accumulator should be $00"
+
+    # SBC $20,X (zero-page,X)
+    cpu.step()  # LDA #$10
+    cpu.step()  # STA $20,X
+    cpu.c = 1
+    cpu.step()  # SBC $20,X
+    assert cpu.A == 0x00, "Accumulator should be $00"
+
+    # SBC $0630 (absolute)
+    cpu.step()  # LDA #$20
+    cpu.step()  # STA $0630
+    cpu.c = 1
+    cpu.step()  # SBC $0630
+    assert cpu.A == 0x00, "Accumulator should be $00"
+
+@pytest.mark.skip(reason="not implemented")
+def test_SBC_decimal():
+    program = [
+        0xF8,              # SED        (Set Decimal Mode)
+        0xA9, 0x25,        # LDA #$25   (Load A with $25 in BCD)
+        0xE9, 0x18,        # SBC #$18   (Expected result $07 in BCD)
+
+        0xA9, 0x00,        # LDA #$00   (Load A with $00 in BCD)
+        0xE9, 0x01,        # SBC #$01   (Expected result $99 in BCD, borrow occurs)
+
+        0xD8,              # CLD        (Clear Decimal Mode)
+        0xA9, 0x12,        # LDA #$12   (Load A with $12 in binary)
+        0xE9, 0x07         # SBC #$07   (Expected result $0B in binary)
+    ]
+
+    mem = Memory([0xEA] * 0x600 + program + [0xEA] * (0x1000 - len(program)))
+    bus = Bus(mem)
+    cpu = CPU(bus)
+    cpu.PC = 0x0600
+    cpu.c = 1  # Ensure carry is set before SBC
+
+    # SBC in Decimal Mode
+    cpu.step()  # SED
+    cpu.step()  # LDA #$25
+    cpu.step()  # SBC #$18
+    assert cpu.A == 0x07, "Accumulator should be $07 in BCD"
+    assert cpu.c == 1, "Carry should be set"
+
+    # SBC #$01 (BCD borrow case)
+    cpu.step()  # LDA #$00
+    cpu.c = 1   # Ensure carry set before SBC
+    cpu.step()  # SBC #$01
+    assert cpu.A == 0x99, "Accumulator should be $99 in BCD"
+    assert cpu.c == 0, "Carry should be clear"
+
+    # Clear Decimal Mode and Test Binary Subtraction
+    cpu.step()  # CLD
+    cpu.step()  # LDA #$12
+    cpu.c = 1   # Ensure carry set before SBC
+    cpu.step()  # SBC #$07
+    assert cpu.A == 0x0B, "Accumulator should be $0B in binary mode"

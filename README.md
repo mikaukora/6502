@@ -38,6 +38,9 @@ The emulator currently supports the following 6502 instructions:
   - `INC` - Increment memory
   - `INX` - Increment X
   - `INY` - Increment Y
+- **Arithmetic Operations**
+  - `ADC` - Add with Carry
+  - `SBC` - Subtract with Borrow
 - **Logical Operations**
   - `AND` - AND with Accumulator
   - `EOR` - XOR with Accumulator

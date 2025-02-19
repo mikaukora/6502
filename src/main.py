@@ -425,6 +425,30 @@ class CPU:
                     self.z = self.calc_z(value)
                     self.n = self.calc_n(value)
                     self.write(dst, value)
+            case i.ADC:
+                if self.d:
+                    raise NotImplementedError(f"Instruction {self.instruction} not implemented")
+                else:
+                    M = self.get_data()
+                    result = self.A + M + self.c
+                    # A and M have the same sign AND the result sign is different
+                    self.v = ~((self.A ^ M) & 0x80) & ((self.A ^ result) & 0x80) != 0
+                    self.c = 1 if result > 0xFF else 0
+                    self.A = result
+                    self.z = self.calc_z(self.A)
+                    self.n = self.calc_n(self.A)
+            case i.SBC:
+                if self.d:
+                    raise NotImplementedError(f"Instruction {self.instruction} not implemented")
+                else:
+                    M = self.get_data()
+                    result = self.A + ~(M) + self.c
+                    # A and M have different sign AND the result sign is different
+                    self.v = ((self.A ^ M) & 0x80) & ((self.A ^ result) & 0x80) != 0
+                    self.c = 1 if result > 0 else 0
+                    self.A = result
+                    self.z = self.calc_z(self.A)
+                    self.n = self.calc_n(self.A)
             case _:  # default
                 raise NotImplementedError(f"Instruction {self.instruction} not implemented")
 
