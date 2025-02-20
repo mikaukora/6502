@@ -427,7 +427,22 @@ class CPU:
                     self.write(dst, value)
             case i.ADC:
                 if self.d:
-                    raise NotImplementedError(f"Instruction {self.instruction} not implemented")
+                    M = self.get_data()
+                    ml = M & 0x0F
+                    mh = M & 0xF0
+                    al = self.A & 0x0F
+                    ah = self.A & 0xF0
+                    result = al + ml + self.c
+                    if result > 0x09:
+                        result += 0x06
+                    result = result + ah + mh
+                    if result > 0x99:
+                        result += 0x60
+                    self.v = ~((self.A ^ M) & 0x80) & ((self.A ^ result) & 0x80) != 0
+                    self.c = 1 if result > 0xFF else 0
+                    self.A = result
+                    self.z = self.calc_z(self.A)
+                    self.n = self.calc_n(self.A)
                 else:
                     M = self.get_data()
                     result = self.A + M + self.c
@@ -439,7 +454,36 @@ class CPU:
                     self.n = self.calc_n(self.A)
             case i.SBC:
                 if self.d:
-                    raise NotImplementedError(f"Instruction {self.instruction} not implemented")
+                    M = self.get_data()
+                    ml = M & 0x0F
+                    mh = M & 0xF0
+                    al = self.A & 0x0F
+                    ah = self.A & 0xF0
+                    borrow = 1 - self.c
+
+                    # Lower nibble
+                    result_l = al - ml - borrow
+                    if result_l < 0:
+                        result_l = (result_l - 0x06) & 0x0F
+                        borrow = 0x10
+                    else:
+                        borrow = 0
+
+                    # Upper nibble
+                    result_h = ah - mh - borrow
+                    if result_h < 0:
+                        result_h = (result_h - 0x60) & 0xF0
+                        self.c = 0
+                    else:
+                        self.c = 1
+
+                    result = (result_h | result_l) & 0xFF
+
+                    self.v = ((self.A ^ M) & 0x80) & ((self.A ^ result) & 0x80) != 0
+
+                    self.A = result
+                    self.z = self.calc_z(self.A)
+                    self.n = self.calc_n(self.A)
                 else:
                     M = self.get_data()
                     result = self.A + ~(M) + self.c

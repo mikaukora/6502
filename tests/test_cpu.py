@@ -2222,7 +2222,6 @@ def test_ADC_binary():
     assert cpu.A == 0x10, "Accumulator should be $10"
 
 
-@pytest.mark.skip(reason="not implemented")
 def test_ADC_decimal():
     program = [
         0xF8,              # SED        (Set Decimal Mode)
@@ -2245,6 +2244,7 @@ def test_ADC_decimal():
     # ADC in Decimal Mode
     cpu.step()  # SED
     cpu.step()  # LDA #$25
+    cpu.c = 0
     cpu.step()  # ADC #$18
     assert cpu.A == 0x43, "Accumulator should be $43 in BCD"
     assert cpu.c == 0, "Carry should be clear"
@@ -2258,6 +2258,7 @@ def test_ADC_decimal():
     # Clear Decimal Mode and Test Binary Addition
     cpu.step()  # CLD
     cpu.step()  # LDA #$12
+    cpu.c = 0
     cpu.step()  # ADC #$34
     assert cpu.A == 0x46, "Accumulator should be $46 in binary mode"
 
@@ -2334,7 +2335,7 @@ def test_SBC_binary():
     cpu.step()  # SBC $0630
     assert cpu.A == 0x00, "Accumulator should be $00"
 
-@pytest.mark.skip(reason="not implemented")
+
 def test_SBC_decimal():
     program = [
         0xF8,              # SED        (Set Decimal Mode)
