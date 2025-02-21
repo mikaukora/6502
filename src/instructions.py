@@ -92,8 +92,8 @@ standard: List[List[Optional[Tuple[Instruction, AddressingMode]]]] = [
         [None, (i.EOR, m.IND_Y), None, None, None, (i.EOR, m.ZPG_X), (i.LSR, m.ZPG_X), None, (i.CLI, m.IMPL), (i.EOR, m.ABS_Y), None, None, None, (i.EOR, m.ABS_X), (i.LSR, m.ABS_X), None], # 5
         [(i.RTS, m.ABS), (i.ADC, m.IND_X), None, None, None, (i.ADC, m.ZPG), (i.ROR, m.ZPG), None, (i.PLA, m.IMPL), (i.ADC, m.IMM), (i.ROR, m.A), None, (i.JMP, m.IND), (i.ADC, m.ABS), (i.ROR, m.ABS), None], # 6
         [None, (i.ADC, m.IND_Y), None, None, None, (i.ADC, m.ZPG_X), (i.ROR, m.ZPG_X), None, (i.SEI, m.IMPL), (i.ADC, m.ABS_Y), None, None, None, (i.ADC, m.ABS_X), (i.ROR, m.ABS_X), None], # 7
-        [None, None, None, None, (i.STY, m.ZPG), (i.STA, m.ZPG), (i.STX, m.ZPG), None, (i.DEY, m.IMPL), None, (i.TXA, m.IMPL), None, (i.STY, m.ABS), (i.STA, m.ABS), (i.STX, m.ABS), None], # 8
-        [(i.BCC, m.REL), None, None, None, (i.STY, m.ZPG_X), (i.STA, m.ZPG_X), (i.STX, m.ZPG_Y), None, (i.TYA, m.IMPL), None, (i.TXS, m.IMPL), None, None, None, None, None ], # 9
+        [None, (i.STA, m.IND_X), None, None, (i.STY, m.ZPG), (i.STA, m.ZPG), (i.STX, m.ZPG), None, (i.DEY, m.IMPL), None, (i.TXA, m.IMPL), None, (i.STY, m.ABS), (i.STA, m.ABS), (i.STX, m.ABS), None], # 8
+        [(i.BCC, m.REL), (i.STA, m.IND_Y), None, None, (i.STY, m.ZPG_X), (i.STA, m.ZPG_X), (i.STX, m.ZPG_Y), None, (i.TYA, m.IMPL), (i.STA, m.ABS_Y), (i.TXS, m.IMPL), None, None, (i.STA, m.ABS_X), None, None ], # 9
         [(i.LDY, m.IMM), None, (i.LDX, m.IMM), None, (i.LDY, m.ZPG), (i.LDA, m.ZPG), (i.LDX, m.ZPG), None, (i.TAY, m.IMPL), (i.LDA, m.IMM), (i.TAX, m.IMPL), None, (i.LDY, m.ABS), (i.LDA, m.ABS), (i.LDX, m.ABS), None], # A
         [(i.BCS, m.REL), None, None, None, (i.LDY, m.ZPG_X), (i.LDA, m.ZPG_X), (i.LDX, m.ZPG_Y), None, (i.CLV, m.IMPL), (i.LDA, m.ABS_Y), (i.TSX, m.IMPL), None, (i.LDY, m.ABS_X), (i.LDA, m.ABS_X), (i.LDX, m.ABS_Y), None], # B
         [(i.CPY, m.IMM), (i.CMP, m.IND_X), None, None, (i.CPY, m.ZPG), (i.CMP, m.ZPG), (i.DEC, m.ZPG), None, (i.INY, m.IMPL), (i.CMP, m.IMM), (i.DEX, m.IMPL), None, (i.CPY, m.ABS), (i.CMP, m.ABS), (i.DEC, m.ABS), None], # C
