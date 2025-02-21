@@ -69,6 +69,8 @@ The emulator currently supports the following 6502 instructions:
   - `BPL` - Branch on Result Plus (negative flag clear)
   - `BCC` - Branch on Carry Clear
   - `BCS` - Branch on Carry Set
+  - `BVC` - Branch on Overflow Clear
+  - `BVS` - Branch on Overflow Set
 - **Jumps & Subroutines**
   - `JMP` - Jump
   - `JSR` - Jump to Subroutine

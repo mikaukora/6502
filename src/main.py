@@ -329,6 +329,16 @@ class CPU:
                 offset = self.data
                 if self.c == 0:
                     self.PC = uint16(self.PC + offset)
+            case i.BVC:
+                self.fetch()
+                offset = self.data
+                if self.v == 0:
+                    self.PC = uint16(self.PC + offset)
+            case i.BVS:
+                self.fetch()
+                offset = self.data
+                if self.v == 1:
+                    self.PC = uint16(self.PC + offset)
             case i.AND:
                 self.A = self.A & self.get_data()
                 self.z = self.calc_z(self.A)
