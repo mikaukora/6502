@@ -2376,3 +2376,56 @@ def test_SBC_decimal():
     cpu.c = 1   # Ensure carry set before SBC
     cpu.step()  # SBC #$07
     assert cpu.A == 0x0B, "Accumulator should be $0B in binary mode"
+
+
+def test_BRK_RTI():
+    program = [
+        0xA9, 0x12,        # LDA #$12   (Load A with $12)
+        0x8D, 0x00, 0x02,  # STA $0200  (Store A at $0200)
+        0x00, 0xEA,        # BRK        (Trigger interrupt, with optional signature byte)
+
+        0xA9, 0x34,        # LDA #$34
+        0x8D, 0x01, 0x02,  # STA $0201
+
+        # IRQ/BRK handler at $FFFE points here
+        0xA9, 0x56,        # LDA #$56   (Load A with $56)
+        0x40,              # RTI        (Return from interrupt)
+    ]
+
+    mem = Memory([0xEA] * 0x600 + program + [0xEA] * (0x10000 - len(program)))
+    bus = Bus(mem)
+    cpu = CPU(bus)
+    cpu.PC = 0x0600
+
+    # Set IRQ/BRK vector to point to interrupt handler at 0x60B
+    mem[0xFFFE] = 0x0C
+    mem[0xFFFF] = 0x06
+
+    initial_S = cpu.S
+
+    cpu.step()  # LDA #$12
+    cpu.step()  # STA $0200
+    cpu.step()  # BRK (should push PC+2 and status to stack, then jump to handler)
+
+    # Verify stack contents after BRK
+    assert mem[0x0100 + initial_S] == 0x06, "High byte of PC+2 should be 0x06"
+    assert mem[0x0100 + initial_S - 1] == 0x07, "Low byte of PC+2 should be 0x07"
+    assert mem[0x0100 + initial_S - 2] & 0x10 == 0x10, "Break flag should be set in pushed status"
+
+    assert cpu.PC == 0x060C, "PC should jump to handler at 0x60C"
+
+    cpu.step()  # LDA #$56 (inside handler)
+    cpu.step()  # RTI (restore PC and status)
+
+    # Verify PC after RTI
+    assert cpu.PC == 0x607, "RTI should restore PC to 0x607"
+    assert cpu.S == initial_S, "Stack pointer should be back to original position"
+    assert cpu.A == 0x56, "A should be restored to last loaded value"
+
+    # Ensure instruction after BRK executes correctly
+    cpu.step()  # LDA #$34
+    assert cpu.A == 0x34, "Execution should resume correctly after RTI"
+
+    cpu.step()  # STA $0201
+    assert mem[0x0201] == 0x34, "Memory at $0201 should be set to $34"
+

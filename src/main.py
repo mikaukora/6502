@@ -503,6 +503,21 @@ class CPU:
                     self.A = result
                     self.z = self.calc_z(self.A)
                     self.n = self.calc_n(self.A)
+            case i.BRK:
+                # PC already incremented once, store "PC + 2"
+                addr = uint16(self.PC + 1)
+                self.stack_push(uint8(addr >> 8))
+                self.stack_push(uint8(addr))
+                self.stack_push(self.P | 0x18)
+                # Jump to IRQ vector
+                ll = self.read(0xFFFE)
+                hh = self.read(0xFFFF)
+                self.PC = toUint16(hh, ll)
+            case i.RTI:
+                self.P = self.stack_pop() & ~(0x18)
+                ll = self.stack_pop()
+                hh = self.stack_pop()
+                self.PC = toUint16(hh, ll)
             case _:  # default
                 raise NotImplementedError(f"Instruction {self.instruction} not implemented")
 

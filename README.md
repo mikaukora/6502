@@ -75,6 +75,9 @@ The emulator currently supports the following 6502 instructions:
   - `JMP` - Jump
   - `JSR` - Jump to Subroutine
   - `RTS` - Return from Subroutine
+- **Interrupts**
+  - `BRK` - Break / Software Interrupt
+  - `RTI` - Return from Interrupt
 - **Other**
   - `BIT` - Bit Test (Memory & Accumulator)
   - `NOP` - No Operation
