@@ -539,9 +539,11 @@ class CPU:
             self.execute()
         print("End of program")
 
-    def reset(self):
-        # TODO: start sequence, read reset vector, jump
-        pass
+    def reset(self, ll=0xFFFC, hh=0xFFFD):
+        # default reset vector at $FFFC, $FFFD
+        ll_data = self.read(ll)
+        hh_data = self.read(hh)
+        self.PC = toUint16(hh_data, ll_data)
 
     @property
     def A(self):
