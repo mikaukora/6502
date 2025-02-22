@@ -1,5 +1,5 @@
 import sys
-from instructions import decode_standard, i, m
+from .instructions import decode_standard, i, m
 
 
 def uint8(value: int) -> int:
@@ -16,6 +16,11 @@ def toUint16(high: int, low: int) -> int:
 
 def bit(value: int) -> int:
     return value & 0x01
+
+
+def toInt8(value: int) -> int:
+    # 0x80 (128) -> -128, 0xFF (256) -> -1
+    return value if value < 0x80 else value - 0x100
 
 
 class Memory:
@@ -152,6 +157,8 @@ class CPU:
             ll = self.read(self.data)
             hh = self.read(uint8(self.data + 1))
             return self.read(toUint16(hh, ll) + self.Y)
+        else:
+            raise NotImplementedError('Unknown addressing mode')
 
     """
         Fetches the address based on the addressing mode.
@@ -187,6 +194,8 @@ class CPU:
             # introduce a bug, hh is not incremented by the CPU
             target_hh = self.read(toUint16(hh, uint8(ll + 1)))
             return toUint16(target_hh, target_ll)
+        else:
+            raise NotImplementedError('Unknown addressing mode')
 
     def stack_push(self, value):
         self.write(0x0100 + self.S, value)
@@ -306,42 +315,42 @@ class CPU:
                 self.PC = self.get_addr()
             case i.BEQ:
                 self.fetch()
-                offset = self.data
+                offset = toInt8(self.data)
                 if self.z == 1:
                     self.PC = uint16(self.PC + offset)
             case i.BNE:
                 self.fetch()
-                offset = self.data
+                offset = toInt8(self.data)
                 if self.z == 0:
                     self.PC = uint16(self.PC + offset)
             case i.BMI:
                 self.fetch()
-                offset = self.data
+                offset = toInt8(self.data)
                 if self.n == 1:
                     self.PC = uint16(self.PC + offset)
             case i.BPL:
                 self.fetch()
-                offset = self.data
+                offset = toInt8(self.data)
                 if self.n == 0:
                     self.PC = uint16(self.PC + offset)
             case i.BCS:
                 self.fetch()
-                offset = self.data
+                offset = toInt8(self.data)
                 if self.c == 1:
                     self.PC = uint16(self.PC + offset)
             case i.BCC:
                 self.fetch()
-                offset = self.data
+                offset = toInt8(self.data)
                 if self.c == 0:
                     self.PC = uint16(self.PC + offset)
             case i.BVC:
                 self.fetch()
-                offset = self.data
+                offset = toInt8(self.data)
                 if self.v == 0:
                     self.PC = uint16(self.PC + offset)
             case i.BVS:
                 self.fetch()
-                offset = self.data
+                offset = toInt8(self.data)
                 if self.v == 1:
                     self.PC = uint16(self.PC + offset)
             case i.AND:
