@@ -170,6 +170,11 @@ class CPU:
             self.fetch()
             hh = self.data
             return toUint16(hh, ll) + self.X
+        elif self.addressing_mode == m.ABS_Y:
+            ll = self.data
+            self.fetch()
+            hh = self.data
+            return toUint16(hh, ll) + self.Y
         elif self.addressing_mode == m.ZPG_X:
             return uint8(self.data + self.X)
         elif self.addressing_mode == m.ZPG_Y:
