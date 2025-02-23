@@ -194,6 +194,14 @@ class CPU:
             # introduce a bug, hh is not incremented by the CPU
             target_hh = self.read(toUint16(hh, uint8(ll + 1)))
             return toUint16(target_hh, target_ll)
+        elif self.addressing_mode == m.IND_X:
+            ll = self.read(uint8(self.data + self.X))
+            hh = self.read(uint8(self.data + self.X + 1))
+            return toUint16(hh, ll)
+        elif self.addressing_mode == m.IND_Y:
+            ll = self.read(uint8(self.data))
+            hh = self.read(uint8(self.data + 1))
+            return toUint16(hh, ll) + self.Y
         else:
             raise NotImplementedError('Unknown addressing mode')
 
