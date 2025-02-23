@@ -4,10 +4,11 @@ A Python-based emulator designed to help learn and experiment with 6502 assembly
 
 ## Features
 
-- Supports basic 6502 instructions and addressing modes.
+- Supports standard 6502 instructions and addressing modes.
 - Implements a simple CPU, bus, and memory model.
 - Can execute programs provided as raw binary files.
 - Provides unit tests to verify instruction execution.
+- Provides simple AppleI emulation with the Woz Monitor.
 
 ## Supported Instructions
 
@@ -115,6 +116,56 @@ options:
 - **indirect, Y-indexed**
 
 ## Running
+
+### The Woz Monitor
+
+To start 6502 emulation with the Woz Monitor, run:
+
+```sh
+python wozmon.py
+```
+
+The following prompt will be shown:
+
+```sh
+Starting the Woz Monitor
+Press q to quit
+\
+```
+
+To inspect memory, input the address (in capital letters):
+
+```sh
+EE
+
+00EE: 00
+```
+
+Use dot to inpect a range:
+
+```sh
+24.2F
+
+0024: 24 00 24 00
+0028: 2F 00 03 00 00 00 00 00
+```
+
+It is also possible to change memory contents with ':'. The previous memory value is printed first:
+
+```sh
+30:EA
+
+0030: 00
+30
+
+0030: EA
+```
+
+Run a program at given address with 'R':
+
+```sh
+0C00 R
+```
 
 ### Compiling example programs
 

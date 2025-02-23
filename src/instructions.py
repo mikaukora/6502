@@ -1,8 +1,8 @@
 from typing import List, Tuple, Optional
 from enum import Enum
 
-# Instruction set: https://www.masswerk.at/6502/6502_instruction_set.html#LDA
 
+# Instruction set: https://www.masswerk.at/6502/6502_instruction_set.html
 
 class Instruction(Enum):
     BRK = "BRK"
@@ -108,7 +108,7 @@ standard: List[List[Optional[Tuple[Instruction, AddressingMode]]]] = [
 def decode_standard(instruction) -> Optional[Tuple[Instruction, AddressingMode]]:
     try:
         i, m = standard[instruction >> 4][instruction & 0xF]
-        print(f"{instruction:#04x} {i.value} {m.value}")
+        # print(f"{instruction:#04x} {i.value} {m.value}")
         return i, m
     except TypeError:
         raise NotImplementedError(f"Unknown instruction {instruction:#04x}")
