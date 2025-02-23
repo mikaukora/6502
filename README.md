@@ -8,7 +8,7 @@ A Python-based emulator designed to help learn and experiment with 6502 assembly
 - Implements a simple CPU, bus, and memory model.
 - Can execute programs provided as raw binary files.
 - Provides unit tests to verify instruction execution.
-- Provides simple AppleI emulation with the Woz Monitor.
+- Provides simple Apple I emulation with the Woz Monitor.
 
 ## Supported Instructions
 
