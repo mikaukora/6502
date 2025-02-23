@@ -513,7 +513,7 @@ class CPU:
                     result = self.A + ~(M) + self.c
                     # A and M have different sign AND the result sign is different
                     self.v = ((self.A ^ M) & 0x80) & ((self.A ^ result) & 0x80) != 0
-                    self.c = 1 if result > 0 else 0
+                    self.c = 1 if result >= 0 else 0
                     self.A = result
                     self.z = self.calc_z(self.A)
                     self.n = self.calc_n(self.A)
