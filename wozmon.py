@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import argparse
 import traceback
 import termios
@@ -5,7 +7,7 @@ import sys
 import select
 import base64
 import logging
-from src.main import CPU, Bus
+from src.model import CPU, Bus
 
 # References:
 # https://zserge.com/posts/6502/

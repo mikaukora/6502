@@ -1,5 +1,5 @@
 import pytest
-from src.main import CPU, Bus, Memory
+from src.model import CPU, Bus, Memory
 
 
 def test_registers():

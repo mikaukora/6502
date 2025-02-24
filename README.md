@@ -122,7 +122,7 @@ options:
 To start 6502 emulation with the Woz Monitor, run:
 
 ```sh
-python wozmon.py
+./wozmon.py
 ```
 
 The following prompt will be shown:
@@ -180,7 +180,7 @@ pushd asm && make && popd
 You can run the emulator with a raw binary file by providing it as an argument:
 
 ```sh
-python src/main.py asm/test.bin
+./run_asm.py asm/test.bin
 ```
 
 This will output the status of the CPU, memory reads/writes and instruction decoding, such as:
@@ -188,21 +188,17 @@ This will output the status of the CPU, memory reads/writes and instruction deco
 ```sh
 Using file asm/test2.bin
 0000    a9 01 aa ca ca
-A: 0x00 X: 0x00 Y: 0x00 S: 0x00
-P: 0x00 Z: 0 N: 0 V: 0 B: 0 D: 0 I: 0 C: 0
+A: 0x00 X: 0x00 Y: 0x00 S: 0xff
+P: 0x00 Z: 0 N: 0 V: 0 D: 0 I: 0 C: 0
 PC: 0x0000
 R 0x0000: a9
-0xa9 LDA #
 R 0x0001: 1
 R 0x0002: aa
-0xaa TAX impl
 R 0x0003: ca
-0xca DEX impl
 R 0x0004: ca
-0xca DEX impl
 End of program
-A: 0x01 X: 0xff Y: 0x00 S: 0x00
-P: 0x80 Z: 0 N: 1 V: 0 B: 0 D: 0 I: 0 C: 0
+A: 0x01 X: 0xff Y: 0x00 S: 0xff
+P: 0x80 Z: 0 N: 1 V: 0 D: 0 I: 0 C: 0
 PC: 0x0005
 0000    a9 01 aa ca ca
 ```

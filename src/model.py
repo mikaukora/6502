@@ -1,5 +1,4 @@
-import sys
-from .instructions import decode_standard, i, m
+from src.instructions import decode_standard, i, m
 
 
 def uint8(value: int) -> int:
@@ -663,25 +662,3 @@ class CPU:
     def c(self, value):
         self._P = self._P & ~(1) | bit(value)
 
-
-if __name__ == "__main__":
-    filename = len(sys.argv) > 1 and sys.argv[1] or None
-    if not filename:
-        print("Error: Missing filename")
-        sys.exit(1)
-    print(f"Using file {filename}")
-
-    try:
-        data = bytearray(open(filename, "rb").read())
-    except Exception as e:
-        print(f"Error: {e}")
-        sys.exit(1)
-
-    memory = Memory(bytearray(data))
-    memory.dump()
-    bus = Bus(memory)
-    cpu = CPU(bus)
-    print(cpu)
-    cpu.run()
-    print(cpu)
-    memory.dump()
