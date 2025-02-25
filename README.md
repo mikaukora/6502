@@ -1,14 +1,16 @@
 # 6502 Emulator
 
-A Python-based emulator designed to help learn and experiment with 6502 assembly and machine language. This project is a work in progress, with a focus on understanding the inner workings of the 6502 processor.
+A Python-based emulator for learning and experimenting with 6502 assembly and machine language. This project simulates a full 6502 CPU, providing tools for disassembly, execution, and debugging of raw binary programs.
+It includes support for all standard 6502 instructions and addressing modes, a simple Apple I emulation with the Woz Monitor, and various utilities to inspect, modify, and execute machine code.
+
 
 ## Features
 
-- Supports standard 6502 instructions and addressing modes.
-- Implements a simple CPU, bus, and memory model.
-- Can execute programs provided as raw binary files.
-- Provides unit tests to verify instruction execution.
-- Provides simple Apple I emulation with the Woz Monitor.
+- Full 6502 CPU Emulation – Supports all standard 6502 instructions and addressing modes.
+- Binary Execution – Run programs directly from raw binary files.
+- Apple I Emulation – Includes a working Woz Monitor for interactive memory inspection and execution.
+- Disassembler – Convert machine code into readable assembly with comments for better understanding.
+- Instruction Listing Tool – Quickly look up implemented instructions and opcodes.
 
 ## Supported Instructions
 
