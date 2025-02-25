@@ -167,6 +167,53 @@ Run a program at given address with 'R':
 0C00 R
 ```
 
+### Disassembler
+
+A simple disassembler is provided. It can be used to study opcodes and construct
+commented Python code e.g. for unit tests.
+
+```sh
+./disasm.py --help
+usage: disasm.py [-h] [--log LOG] infile
+
+Disassembler for 6502
+
+positional arguments:
+  infile      Binary file to disassemble
+
+options:
+  -h, --help  show this help message and exit
+  --log LOG   Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+```
+
+Disassemble a file:
+
+```sh
+cat f.txt
+0xCE, 0x0C, 0x00, 0xCE, 0x0C, 0x00, 0xEE, 0x0C, 0x00, 0xEE, 0x0C, 0x00, 0x00
+
+./disasm.py f.txt
+0XCE, 0X0C,  0X00,  # DEC, ABS
+0XCE, 0X0C,  0X00,  # DEC, ABS
+0XEE, 0X0C,  0X00,  # INC, ABS
+0XEE, 0X0C,  0X00,  # INC, ABS
+0X00,               # BRK, IMPL
+13 bytes
+```
+
+Disassemble from stdin:
+
+```sh
+echo "0xA0, 0x09, 0xB9, 0x00, 0x00, 0xC8, 0xB9, 0x00, 0x00, 0xCC, 0xDD" | ./disasm.py -
+0XA0, 0X09,         # LDY, IMM
+0XB9, 0X00,  0X00,  # LDA, ABS_Y
+0XC8,               # INY, IMPL
+0XB9, 0X00,  0X00,  # LDA, ABS_Y
+0XCC,               # ???
+0XDD,               # ???
+11 bytes
+```
+
 ### Compiling example programs
 
 To compile the example programs into raw binary format, run:
