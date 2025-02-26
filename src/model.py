@@ -127,6 +127,8 @@ class CPU:
         self.fetch()
         if self.addressing_mode == m.IMM:
             return self.data
+        elif self.addressing_mode == m.REL:
+            return self.data
         elif self.addressing_mode == m.ZPG:
             return self.read(self.data)
         elif self.addressing_mode == m.ZPG_X:
@@ -321,43 +323,35 @@ class CPU:
             case i.JMP:
                 self.PC = self.get_addr()
             case i.BEQ:
-                self.fetch()
-                offset = toInt8(self.data)
+                offset = toInt8(self.get_data())
                 if self.z == 1:
                     self.PC = uint16(self.PC + offset)
             case i.BNE:
-                self.fetch()
-                offset = toInt8(self.data)
+                offset = toInt8(self.get_data())
                 if self.z == 0:
                     self.PC = uint16(self.PC + offset)
             case i.BMI:
-                self.fetch()
-                offset = toInt8(self.data)
+                offset = toInt8(self.get_data())
                 if self.n == 1:
                     self.PC = uint16(self.PC + offset)
             case i.BPL:
-                self.fetch()
-                offset = toInt8(self.data)
+                offset = toInt8(self.get_data())
                 if self.n == 0:
                     self.PC = uint16(self.PC + offset)
             case i.BCS:
-                self.fetch()
-                offset = toInt8(self.data)
+                offset = toInt8(self.get_data())
                 if self.c == 1:
                     self.PC = uint16(self.PC + offset)
             case i.BCC:
-                self.fetch()
-                offset = toInt8(self.data)
+                offset = toInt8(self.get_data())
                 if self.c == 0:
                     self.PC = uint16(self.PC + offset)
             case i.BVC:
-                self.fetch()
-                offset = toInt8(self.data)
+                offset = toInt8(self.get_data())
                 if self.v == 0:
                     self.PC = uint16(self.PC + offset)
             case i.BVS:
-                self.fetch()
-                offset = toInt8(self.data)
+                offset = toInt8(self.get_data())
                 if self.v == 1:
                     self.PC = uint16(self.PC + offset)
             case i.AND:
