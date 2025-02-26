@@ -119,10 +119,10 @@ class CPU:
     def calc_n(self, data):
         return (data >> 7) & 1
 
-
     """
         Fetches the data based on the addressing mode.
     """
+
     def get_data(self):
         self.fetch()
         if self.addressing_mode == m.IMM:
@@ -159,11 +159,12 @@ class CPU:
             hh = self.read(uint8(self.data + 1))
             return self.read(toUint16(hh, ll) + self.Y)
         else:
-            raise NotImplementedError('Unknown addressing mode')
+            raise NotImplementedError("Unknown addressing mode")
 
     """
         Fetches the address based on the addressing mode.
     """
+
     def get_addr(self):
         self.fetch()
         if self.addressing_mode == m.ZPG:
@@ -204,7 +205,7 @@ class CPU:
             hh = self.read(uint8(self.data + 1))
             return toUint16(hh, ll) + self.Y
         else:
-            raise NotImplementedError('Unknown addressing mode')
+            raise NotImplementedError("Unknown addressing mode")
 
     def stack_push(self, value):
         self.write(0x0100 + self.S, value)
@@ -421,7 +422,7 @@ class CPU:
             case i.ROR:
                 if self.addressing_mode == m.A:
                     lsb = self.A & 0x01
-                    self.A = (( self.c & 0x01 ) << 7) | uint8(self.A >> 1)
+                    self.A = ((self.c & 0x01) << 7) | uint8(self.A >> 1)
                     self.c = lsb
                     self.z = self.calc_z(self.A)
                     self.n = self.calc_n(self.A)
@@ -429,7 +430,7 @@ class CPU:
                     dst = self.get_addr()
                     value = self.read(dst)
                     lsb = value & 0x01
-                    value = (( self.c & 0x01 ) << 7) | uint8(value >> 1)
+                    value = ((self.c & 0x01) << 7) | uint8(value >> 1)
                     self.c = lsb
                     self.z = self.calc_z(value)
                     self.n = self.calc_n(value)
@@ -445,7 +446,7 @@ class CPU:
                     dst = self.get_addr()
                     value = self.read(dst)
                     msb = (value >> 7) & 0x01
-                    value = uint8(value << 1) | ( self.c & 0x01 )
+                    value = uint8(value << 1) | (self.c & 0x01)
                     self.c = msb
                     self.z = self.calc_z(value)
                     self.n = self.calc_n(value)
@@ -534,11 +535,9 @@ class CPU:
                 hh = self.stack_pop()
                 self.PC = toUint16(hh, ll)
             case _:  # default
-                raise NotImplementedError(f"Instruction {self.instruction} not implemented")
-
-    """
-        Starts from the address in PC.
-    """
+                raise NotImplementedError(
+                    f"Instruction {self.instruction} not implemented"
+                )
 
     def step(self, cycles=1):
         for _ in range(cycles):
@@ -655,4 +654,3 @@ class CPU:
     @c.setter
     def c(self, value):
         self._P = self._P & ~(1) | bit(value)
-
