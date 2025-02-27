@@ -119,56 +119,20 @@ class CPU:
     def calc_n(self, data):
         return (data >> 7) & 1
 
-    """
-        Fetches the data based on the addressing mode.
-    """
-
-    def get_data(self):
-        self.fetch()
-        if self.addressing_mode == m.IMM:
-            return self.data
-        elif self.addressing_mode == m.REL:
-            return self.data
-        elif self.addressing_mode == m.ZPG:
-            return self.read(self.data)
-        elif self.addressing_mode == m.ZPG_X:
-            return self.read(uint8(self.data + self.X))
-        elif self.addressing_mode == m.ZPG_Y:
-            return self.read(uint8(self.data + self.Y))
-        elif self.addressing_mode == m.ABS:
-            ll = self.data
-            self.fetch()
-            hh = self.data
-            return self.read(toUint16(hh, ll))
-        elif self.addressing_mode == m.ABS_X:
-            ll = self.data
-            self.fetch()
-            hh = self.data
-            return self.read(toUint16(hh, ll) + self.X)
-        elif self.addressing_mode == m.ABS_Y:
-            ll = self.data
-            self.fetch()
-            hh = self.data
-            return self.read(toUint16(hh, ll) + self.Y)
-        elif self.addressing_mode == m.IND_X:
-            ll = self.read(uint8(self.data + self.X))
-            hh = self.read(uint8(self.data + self.X + 1))
-            return self.read(toUint16(hh, ll))
-        elif self.addressing_mode == m.IND_Y:
-            ll = self.read(self.data)
-            hh = self.read(uint8(self.data + 1))
-            return self.read(toUint16(hh, ll) + self.Y)
-        else:
-            raise NotImplementedError("Unknown addressing mode")
-
-    """
-        Fetches the address based on the addressing mode.
-    """
-
     def get_addr(self):
         self.fetch()
+        if self.addressing_mode == m.IMM:
+            # Used for read only
+            return self.data
+        elif self.addressing_mode == m.REL:
+            # Used for read only
+            return self.data
         if self.addressing_mode == m.ZPG:
             return self.data
+        elif self.addressing_mode == m.ZPG_X:
+            return uint8(self.data + self.X)
+        elif self.addressing_mode == m.ZPG_Y:
+            return uint8(self.data + self.Y)
         elif self.addressing_mode == m.ABS:
             ll = self.data
             self.fetch()
@@ -184,10 +148,6 @@ class CPU:
             self.fetch()
             hh = self.data
             return toUint16(hh, ll) + self.Y
-        elif self.addressing_mode == m.ZPG_X:
-            return uint8(self.data + self.X)
-        elif self.addressing_mode == m.ZPG_Y:
-            return uint8(self.data + self.Y)
         elif self.addressing_mode == m.IND:
             ll = self.data
             self.fetch()
@@ -206,6 +166,13 @@ class CPU:
             return toUint16(hh, ll) + self.Y
         else:
             raise NotImplementedError("Unknown addressing mode")
+
+    def get_data(self):
+        addr = self.get_addr()
+        if self.addressing_mode in [m.REL, m.IMM]:
+            # Use literal value
+            return addr
+        return self.read(addr)
 
     def stack_push(self, value):
         self.write(0x0100 + self.S, value)
