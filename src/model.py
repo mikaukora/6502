@@ -18,9 +18,7 @@ def bit(value: int) -> int:
 
 
 def toInt8(value: int) -> int:
-    # 0x80 (128) -> -128, 0xFF (256) -> -1
-    return value if value < 0x80 else value - 0x100
-
+    return (value ^ 0x80) - 0x80
 
 class Memory:
     def __init__(self, data: bytearray):
